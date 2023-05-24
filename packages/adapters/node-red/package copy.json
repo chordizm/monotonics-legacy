@@ -1,0 +1,24 @@
+{
+  "name": "@monotonics/adapter_node-red",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "node-red": {
+    "nodes": {
+      "@monotonics/task": "dist/nodes/task.js",
+      "@monotonics/add-data": "dist/nodes/add-data.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc && copyfiles -u 1 \"src/nodes/*.html\" dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@monotonics/core": "*",
+    "node-red": "^3.0.2"
+  },
+  "devDependencies": {
+    "@types/node-red": "^1.3.1",
+    "copyfiles": "^2.4.1"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "private": true,
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "packages/**/*"
+    ]
+  },
+  "scripts": {
+    "build:core": "yarn workspace @monotonics/core build",
+    "build:adapter_node-red": "yarn workspace @monotonics/adapter_node-red build",
+    "build:adapter_prisma": "yarn workspace @monotonics/adapter_prisma build",
+    "build:adapter_react": "yarn workspace @monotonics/adapter_react build",
+    "build:adapters": "yarn build:adapter_node-red && yarn build:adapter_prisma && yarn build:adapter_react",
+    "build:packages": "yarn build:core && yarn build:adapters",
+    "build": "yarn build:packages && yarn workspace @monotonics/web build",
+    "dev": "yarn workspace @monotonics/web dev",
+    "migrate:sqlite": "yarn workspace @monotonics/adapter_prisma migrate:sqlite",
+    "storybook": "yarn workspace @monotonics/adapter_react storybook",
+    "start:web": "yarn workspace @monotonics/web start"
+  }
+}

@@ -1,0 +1,27 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "sqlite"
+    url      = env("MONOCONICS_SQLITE_DATABASE_URL")
+}
+
+model Dataset {
+    id            String  @id @default(uuid())
+    name          String  @unique
+    description   String
+    taskId        String
+    data          Data[]
+}
+
+model Data {
+    id          String  @id @default(uuid())
+    date        DateTime
+    dataset     Dataset @relation(fields: [datasetId], references: [id])
+    datasetId   String
+    name        String
+    mimeType    String
+    raw         Bytes
+    params      String
+}

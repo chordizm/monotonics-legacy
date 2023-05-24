@@ -1,0 +1,65 @@
+<script type="text/javascript">
+  RED.nodes.registerType("@monotonics/task", {
+    category: "MonoTonics",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "MonoTonics Task" },
+      mimeType: { value: "application/json" },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "button.png",
+    label: function () {
+      return this.name || "Cosumium Task";
+    },
+    oneditprepare: function () {
+      var node = this;
+      var id = $("#node-input-id");
+      id.val(this.id || "");
+      var name = $("#node-input-name");
+      name.val(node.name || "");
+      var mimeType = $("#node-input-mimeType");
+      mimeType.val(node.mimeType || "application/json");
+    },
+    oneditsave: function () {
+      var node = this;
+      var name = $("#node-input-name");
+      node.name = name.val();
+      var mimeType = $("#node-input-mimeType");
+      node.mimeType = mimeType.val();
+    },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="@monotonics/task">
+  <div class="form-row">
+    <label for="node-input-id">
+      <i class="icon-tag"></i> ID
+    </label>
+    <input
+      type="text"
+      id="node-input-id"
+      style="width: 70%;"
+      readonly="readonly"
+    />
+    <br/>
+    <label for="node-input-name">
+      <i class="icon-tag"></i> Name
+    </label>
+    <input
+      type="text"
+      id="node-input-name"
+      placeholder="Enter a name"
+      style="width: 70%;"
+    />
+    <label for="node-input-mimeType">
+      <i class="icon-tag"></i> Mime-Type
+    </label>
+    <select id="node-input-mimeType">
+      <option value="application/json">Json</option>
+      <option value="image/*">Image</option>
+      <option value="text/plain">Text</option>
+      <option value="text/csv">CSV</option>
+    </select>
+  </div>
+</script>
