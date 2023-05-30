@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node dist/index.js",
+    "dev": "NODE_ENV=development nodemon",
     "build": "next build && tsc -p tsconfig.build.json",
     "start": "NODE_ENV=production node dist/index.js",
     "lint": "next lint"
@@ -22,8 +22,8 @@
   },
   "devDependencies": {
     "@monotonics/adapter_node-red": "*",
-    "@monotonics/adapter_react": "*",
     "@monotonics/adapter_prisma": "*",
+    "@monotonics/adapter_react": "*",
     "@tanstack/react-query": "^4.29.7",
     "@trpc/client": "^10.27.1",
     "@trpc/next": "^10.27.1",
@@ -33,6 +33,7 @@
     "@types/react-dom": "^18.2.4",
     "nodemon": "^2.0.22",
     "superjson": "^1.12.3",
+    "ts-node": "^10.9.1",
     "zod": "^3.21.4"
   }
 }

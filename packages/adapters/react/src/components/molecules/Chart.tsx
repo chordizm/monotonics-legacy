@@ -12,20 +12,26 @@ import {
 } from "recharts";
 import { Select } from "../atoms";
 import { convertCamelCaseToWords } from "../../utils";
+import { Data } from "@monotonics/core";
 
 export type ChartProps = {
-  data: Record<string, unknown>[];
+  data: Omit<Data, "raw">;
+  colors: Record<string, string>;
+  ignore?: string[];
   onClick?: (index: number) => void;
 };
 
 export const Chart = (props: ChartProps): JSX.Element => {
-  const { data, onClick } = props;
+  const { data, colors, ignore, onClick } = props;
   const columns = useMemo(
-    () => Array.from(new Set(data.flatMap((s) => Object.keys(s)))),
+    () =>
+      Array.from(new Set(data.items.flatMap((x) => Object.keys(x)))).filter(
+        (x) => x !== "labels" && (ignore === undefined || !ignore.includes(x))
+      ),
     [data]
   );
-  const [xAxis, setXAxis] = useState(columns[0]);
-  const [yAxis, setYAxis] = useState(columns[1]);
+  const [xAxis, setXAxis] = useState<string | undefined>(columns[0]);
+  const [yAxis, setYAxis] = useState<string | undefined>(columns[1]);
   return (
     <Flex
       direction="column"
@@ -48,26 +54,29 @@ export const Chart = (props: ChartProps): JSX.Element => {
               fontSize="0.8rem"
               type="number"
               dataKey={xAxis}
-              name={convertCamelCaseToWords(xAxis)}
+              name={xAxis && convertCamelCaseToWords(xAxis)}
             />
             <YAxis
               fontSize="0.8rem"
               type="number"
               dataKey={yAxis}
-              name={convertCamelCaseToWords(yAxis)}
+              name={yAxis && convertCamelCaseToWords(yAxis)}
             />
             <Tooltip cursor={{ strokeDasharray: "3 3" }} />
             <Scatter
               isAnimationActive={false}
               fontSize="0.8rem"
               name="Segments"
-              data={data}
+              data={data.items}
               fill="#8884d8"
             >
-              {data.map((_, index) => (
+              {data.items.map(({ labels }, index) => (
                 <Cell
                   key={`cell-${index}`}
-                  style={{ cursor: "pointer", fill: "rgb(206, 55, 47)" }}
+                  style={{
+                    cursor: "pointer",
+                    fill: colors[labels.sort().join("-")] ?? "rgb(206, 55, 47)",
+                  }}
                   onClick={() => onClick?.(index)}
                 />
               ))}

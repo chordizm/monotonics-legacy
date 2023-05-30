@@ -1,21 +1,23 @@
 import React, { useState } from "react";
-import { Segment } from "@monotonics/core";
+import { Point, Data } from "@monotonics/core";
 import { ActionIcon } from "@mantine/core";
 import { IconWindowMaximize } from "@tabler/icons-react";
 
-export type PolygonProps = Omit<
-  React.SVGProps<SVGPolygonElement>,
-  "onClick"
-> & { selected?: boolean; segment: Segment; onClick?: () => void };
+export type PolygonProps = {
+  selected?: boolean;
+  points: Point[];
+  stroke?: string;
+  fill?: string;
+  onClick?: () => void;
+};
 export const Polygon = (props: PolygonProps): JSX.Element => {
-  const { selected, segment, onClick, ...svgProps } = props;
+  const { selected, points, stroke, fill, onClick } = props;
   return (
     <polygon
-      {...svgProps}
-      fill="#FFFFFF01"
-      stroke="rgb(206, 55, 47)"
+      fill={fill ?? "rgba(206, 55, 47, 0.2)"}
+      stroke={stroke ?? "rgb(206, 55, 47)"}
       strokeWidth={selected ? 2 : 1}
-      points={segment.points.map((p) => `${p.x},${p.y}`).join(" ")}
+      points={points.map((p) => `${p.x},${p.y}`).join(" ")}
       cursor="pointer"
       onClick={onClick}
     />
@@ -24,7 +26,8 @@ export const Polygon = (props: PolygonProps): JSX.Element => {
 
 export type ImageProps = Omit<React.SVGProps<SVGSVGElement>, "onClick"> & {
   src: string;
-  segments: Segment[];
+  data: Omit<Data, "raw">;
+  colors: Record<string, string>;
   selectedIndex?: number;
   onClick?: (index: number | undefined) => void;
 };
@@ -32,15 +35,16 @@ export type ImageProps = Omit<React.SVGProps<SVGSVGElement>, "onClick"> & {
 export const Image = (props: ImageProps): JSX.Element => {
   const {
     src,
-    segments,
+    data,
     selectedIndex,
     onClick,
     onLoad,
     viewBox: defaultViewBox,
-    children,
+    colors,
     ...svgProps
   } = props;
   const [viewBox, setViewBox] = useState(defaultViewBox);
+
   return (
     <div
       style={{
@@ -69,12 +73,14 @@ export const Image = (props: ImageProps): JSX.Element => {
             setViewBox(`0 0 ${box.width} ${box.height}`);
           }}
         />
-        {segments.map((segment, index) =>
+        {data.items.map(({ points, labels }, index) =>
           selectedIndex === undefined || selectedIndex === index ? (
             <Polygon
               key={`segment-${index}`}
               selected={selectedIndex === index}
-              segment={segment}
+              points={(points ?? []) as Point[]}
+              fill="#FFFFFF01"
+              stroke={colors[labels.sort().join("-")]}
               onClick={() => onClick?.(index)}
             />
           ) : (

@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Chart, Image } from "../molecules";
-import { Data, Identity, ImageData } from "@monotonics/core";
+import { Data, Identity, Point } from "@monotonics/core";
 import { DataTable } from "./DataTable";
 import SplitPane, { SashContent, Pane } from "split-pane-react";
 import { getViewBox } from "../../utils";
+
+const getPallet = (labels: string[]): Record<string, string> => {
+  console.log(labels);
+  return labels.reduce(
+    (prev, current, i) => ({
+      ...prev,
+      [current]: `hsl(${(i * 360) / labels.length}, 100%, 50%)`,
+    }),
+    {}
+  );
+};
 
 export type ImageViewProps = {
   data: Omit<Data, "raw">;
@@ -14,7 +25,7 @@ export type ImageViewProps = {
 
 export const ImageView = (props: ImageViewProps): JSX.Element => {
   const { resolveUrl, data, onClick, selectedIndex } = props;
-  const segments = (data.params as ImageData).segments;
+
   const [verticalSizes, setVerticalSizes] = useState<(number | string)[]>([
     "50%",
     "50%",
@@ -23,6 +34,15 @@ export const ImageView = (props: ImageViewProps): JSX.Element => {
     "50%",
     "50%",
   ]);
+  const pallet = useMemo(
+    () =>
+      getPallet(
+        Array.from(
+          new Set(data.items.map((s) => s.labels.sort().join("-")))
+        ).sort()
+      ),
+    [data.items]
+  );
   return (
     <SplitPane
       sashRender={(_, active) => <SashContent active={active} type="vscode" />}
@@ -48,24 +68,29 @@ export const ImageView = (props: ImageViewProps): JSX.Element => {
           <Pane minSize={"30%"} maxSize={"70%"}>
             <Image
               src={resolveUrl(data.id)}
-              segments={segments}
+              colors={pallet}
+              data={data}
               selectedIndex={selectedIndex}
               viewBox={
                 selectedIndex !== undefined
-                  ? getViewBox(segments[selectedIndex].points)
+                  ? getViewBox(data.items[selectedIndex].points as Point[])
                   : undefined
               }
               onClick={(index) => onClick?.(index)}
             />
           </Pane>
           <Chart
-            data={segments.map((s) => s.params)}
+            data={data}
+            colors={pallet}
+            ignore={["points"]}
             onClick={(index) => onClick?.(index)}
           />
         </SplitPane>
       </Pane>
       <DataTable
-        data={segments.map((s) => s.params)}
+        data={data}
+        pallet={pallet}
+        ignore={["points"]}
         onClick={(index) => onClick?.(index)}
       />
     </SplitPane>

@@ -6,27 +6,25 @@ import {
   TableHeaderCell,
   TableBody,
   TableCell,
-} from "../molecules";
+} from "@/components";
 import { Badge, Box } from "@mantine/core";
-import { Data } from "@monotonics/core";
+import { useColors, useSelectedData, useSelectedItemIndex } from "@/store";
 
-export type DataTableProps = {
-  data: Omit<Data, "raw">;
-  pallet: Record<string, string>;
-  ignore?: string[];
-  onClick?: (index: number) => void;
-};
-
-export const DataTable = (props: DataTableProps): JSX.Element => {
-  const { data, pallet, ignore, onClick } = props;
+export const TableView = (_: {}): JSX.Element => {
+  const [data] = useSelectedData();
+  const [colors] = useColors();
+  const [selectedIndex, setSelectedIndex] = useSelectedItemIndex();
+  const ignore = useMemo(() => {
+    return data?.mimeType?.startsWith("image") ? ["points"] : [];
+  }, [data]);
   const columns = useMemo(
     () =>
-      Array.from(new Set(data.items.flatMap((x) => Object.keys(x)))).filter(
+      Array.from(new Set(data?.items.flatMap((x) => Object.keys(x)))).filter(
         (x) => x !== "labels" && (ignore === undefined || !ignore.includes(x))
       ),
     [data]
   );
-  return (
+  return data ? (
     <Table>
       <TableHead>
         <TableRow>
@@ -39,7 +37,7 @@ export const DataTable = (props: DataTableProps): JSX.Element => {
       </TableHead>
       <TableBody>
         {data.items.map((item, index) => (
-          <TableRow key={index} onClick={() => onClick?.(index)}>
+          <TableRow key={index} onClick={() => setSelectedIndex(index)}>
             <TableCell>{index}</TableCell>
             {columns.map((column) => (
               <TableCell key={column}>{JSON.stringify(item[column])}</TableCell>
@@ -50,7 +48,7 @@ export const DataTable = (props: DataTableProps): JSX.Element => {
                   key={label}
                   leftSection={
                     <Box
-                      bg={pallet[label]}
+                      bg={colors[label]}
                       sx={(theme) => ({
                         width: theme.spacing.xs,
                         height: theme.spacing.xs,
@@ -69,5 +67,7 @@ export const DataTable = (props: DataTableProps): JSX.Element => {
         ))}
       </TableBody>
     </Table>
+  ) : (
+    <></>
   );
 };

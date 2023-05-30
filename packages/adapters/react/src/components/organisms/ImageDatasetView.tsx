@@ -1,4 +1,5 @@
-import { ImageView, ImagesView } from ".";
+import { ImagesView } from ".";
+import { ImageView } from "./ImageView";
 import {
   Text,
   Flex,

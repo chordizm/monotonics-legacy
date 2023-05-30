@@ -42,7 +42,7 @@ const settings: LocalSettings = {
   httpAdminRoot: "/red",
   httpNodeRoot: "/api",
   userDir: path.join(os.homedir(), ".monotonics"),
-  //   functionGlobalContext: { context },
+  //    functionGlobalContext: { context },
 };
 
 const prisma = new PrismaClient();
@@ -50,7 +50,6 @@ const prisma = new PrismaClient();
 const adapters: Adapters = {
   gateways: {
     taskRunner: new NodeRedTaskRunner(RED.events),
-    // Implement mock gateway
     data: new SQLiteDataDatabaseAdapter(prisma),
     dataset: new SQLiteDatasetDatabaseAdapter(prisma),
     task: new NodeRedTaskDatabaseAdapter(RED),

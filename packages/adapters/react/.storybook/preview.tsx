@@ -1,6 +1,7 @@
 import React from "react";
 import { MantineProvider } from "@mantine/core";
 import { Preview } from "@storybook/react";
+import { StoreProvider } from "../src";
 import "./globals.css";
 import "split-pane-react/esm/themes/default.css";
 

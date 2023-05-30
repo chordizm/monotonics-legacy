@@ -12,22 +12,19 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
   datasetId: `dataset-${i % 10}`,
   name: `Data ${i + 1}`,
   mimeType: "image/jpeg",
-  params: {
-    segments: Array.from({ length: Math.floor(Math.random() * 500) + 1 }).map(
-      (_, i) => ({
-        points: [
-          { x: Math.random() * 1024, y: Math.random() * 1024 },
-          { x: Math.random() * 1024, y: Math.random() * 1024 },
-          { x: Math.random() * 1024, y: Math.random() * 1024 },
-        ],
-        params: {
-          area: Math.floor(Math.random() * 1000),
-          perimeter: Math.floor(Math.random() * 1000),
-          radius: Math.floor(Math.random() * 1000),
-        },
-      })
-    ),
-  },
+  items: Array.from({ length: Math.floor(Math.random() * 500) + 1 }).map(
+    (_, i) => ({
+      labels: [`label-${Math.floor(Math.random() * 3) + 1}`],
+      points: [
+        { x: Math.random() * 1024, y: Math.random() * 1024 },
+        { x: Math.random() * 1024, y: Math.random() * 1024 },
+        { x: Math.random() * 1024, y: Math.random() * 1024 },
+      ],
+      area: Math.floor(Math.random() * 1000),
+      perimeter: Math.floor(Math.random() * 1000),
+      radius: Math.floor(Math.random() * 1000),
+    })
+  ),
 }));
 
 export const Default = {

@@ -12,12 +12,5 @@ export const getViewBox = (points: Point[]): string => {
     maxX = Math.max(maxX, point.x);
     maxY = Math.max(maxY, point.y);
   }
-
-  //   return {
-  //     left: minX,
-  //     top: minY,
-  //     width: maxX - minX,
-  //     height: maxY - minY,
-  //   };
   return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
 };

@@ -8,24 +8,21 @@ export type Dataset = Entity<{
   name: string;
   description: string;
 }>;
+
+export type Item = Record<string, unknown> & {
+  labels: string[];
+};
+
 export type Data = Entity<{
   date: Date;
   datasetId: Identity;
   name: string;
   mimeType: string;
   raw: Buffer;
-  params: Record<string, unknown>;
+  items: Item[];
 }>;
-export type Task = Entity<{ name: string; mimeType: string }>;
 
+export type Task = Entity<{ name: string; mimeType: string }>;
 export type User = Entity<{ name: string; role: Role }>;
 export type Tag = Entity<{ name: string }>;
 export type Point = { x: number; y: number };
-export type Segment = {
-  points: Point[];
-  params: Record<string, unknown>;
-};
-export type ImageData = {
-  segments: Segment[];
-  params: Record<string, unknown>;
-};
