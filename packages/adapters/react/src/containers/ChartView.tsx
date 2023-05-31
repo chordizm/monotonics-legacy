@@ -5,7 +5,7 @@ import { useMemo } from "react";
 export const ChartView = () => {
   const [data] = useSelectedData();
   const [colors] = useColors();
-  const [selectedIndex, setSelectedIndex] = useSelectedItemIndex();
+  const [_, setSelectedIndex] = useSelectedItemIndex();
   const ignore = useMemo(() => {
     return data?.mimeType?.startsWith("image") ? ["points"] : [];
   }, [data]);

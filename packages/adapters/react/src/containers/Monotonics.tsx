@@ -4,7 +4,9 @@ import { Datasets, View } from ".";
 export const Monotonics = (_: {}): JSX.Element => {
   return (
     <AppShell
-      title="MonoTonics"
+      title={
+        <p style={{ userSelect: "none", padding: 0, margin: 0 }}>MonoTonics</p>
+      }
       navbar={{
         sections: [
           {

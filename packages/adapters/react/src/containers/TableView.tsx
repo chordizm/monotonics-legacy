@@ -9,11 +9,12 @@ import {
 } from "@/components";
 import { Badge, Box } from "@mantine/core";
 import { useColors, useSelectedData, useSelectedItemIndex } from "@/store";
+import { convertCamelCaseToWords } from "@/utils";
 
 export const TableView = (_: {}): JSX.Element => {
   const [data] = useSelectedData();
   const [colors] = useColors();
-  const [selectedIndex, setSelectedIndex] = useSelectedItemIndex();
+  const [__, setSelectedIndex] = useSelectedItemIndex();
   const ignore = useMemo(() => {
     return data?.mimeType?.startsWith("image") ? ["points"] : [];
   }, [data]);
@@ -30,15 +31,17 @@ export const TableView = (_: {}): JSX.Element => {
         <TableRow>
           <TableHeaderCell>Data</TableHeaderCell>
           {columns.map((column) => (
-            <TableHeaderCell key={column}>{column}</TableHeaderCell>
+            <TableHeaderCell key={column}>
+              {convertCamelCaseToWords(column)}
+            </TableHeaderCell>
           ))}
-          <TableHeaderCell>labels</TableHeaderCell>
+          <TableHeaderCell>Labels</TableHeaderCell>
         </TableRow>
       </TableHead>
       <TableBody>
         {data.items.map((item, index) => (
           <TableRow key={index} onClick={() => setSelectedIndex(index)}>
-            <TableCell>{index}</TableCell>
+            <TableCell>{index + 1}</TableCell>
             {columns.map((column) => (
               <TableCell key={column}>{JSON.stringify(item[column])}</TableCell>
             ))}
