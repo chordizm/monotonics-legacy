@@ -6,7 +6,7 @@ import {
   TableHeaderCell,
   TableBody,
   TableCell,
-} from "../molecules";
+} from "..";
 import { Badge, Box } from "@mantine/core";
 import { Data } from "@monotonics/core";
 

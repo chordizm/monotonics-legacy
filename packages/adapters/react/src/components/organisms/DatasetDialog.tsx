@@ -1,6 +1,6 @@
 import { DatasetView, DatasetViewProps } from "./DatasetView";
 import { IconDatabasePlus, IconDatabaseEdit } from "@tabler/icons-react";
-import { Dialog, DialogProps } from "../molecules";
+import { Dialog, DialogProps } from "..";
 
 export type DatasetDialogProps = Omit<DialogProps, "children" | "title"> &
   DatasetViewProps;

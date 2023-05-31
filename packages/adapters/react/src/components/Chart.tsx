@@ -10,8 +10,8 @@ import {
   Scatter,
   Cell,
 } from "recharts";
-import { Select } from "../atoms";
-import { convertCamelCaseToWords } from "../../utils";
+import { Select } from ".";
+import { convertCamelCaseToWords } from "../utils";
 import { Data } from "@monotonics/core";
 
 export type ChartProps = {
@@ -34,13 +34,12 @@ export const Chart = (props: ChartProps): JSX.Element => {
   const [yAxis, setYAxis] = useState<string | undefined>(columns[1]);
   return (
     <Flex
-      direction="column"
       style={{
         width: "100%",
         height: "100%",
       }}
     >
-      <Box style={{ flex: 1, height: 0 }}>
+      <Box style={{ flex: 1, width: 0 }}>
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart
             margin={{
@@ -84,29 +83,27 @@ export const Chart = (props: ChartProps): JSX.Element => {
           </ScatterChart>
         </ResponsiveContainer>
       </Box>
-      <Divider />
-      <Center>
-        <Flex p="sm" gap="sm">
-          <Select
-            label="XAxis"
-            value={xAxis}
-            options={columns.map((column) => ({
-              value: column,
-              label: convertCamelCaseToWords(column),
-            }))}
-            onChange={(value) => setXAxis(value)}
-          />
-          <Select
-            label="YAxis"
-            value={yAxis}
-            options={columns.map((column) => ({
-              value: column,
-              label: convertCamelCaseToWords(column),
-            }))}
-            onChange={(value) => setYAxis(value)}
-          />
-        </Flex>
-      </Center>
+      <Divider orientation="vertical" />
+      <Box p="sm" style={{ flex: 1, maxWidth: 320 }}>
+        <Select
+          label="XAxis"
+          value={xAxis}
+          options={columns.map((column) => ({
+            value: column,
+            label: convertCamelCaseToWords(column),
+          }))}
+          onChange={(value) => setXAxis(value)}
+        />
+        <Select
+          label="YAxis"
+          value={yAxis}
+          options={columns.map((column) => ({
+            value: column,
+            label: convertCamelCaseToWords(column),
+          }))}
+          onChange={(value) => setYAxis(value)}
+        />
+      </Box>
       <Divider />
     </Flex>
   );

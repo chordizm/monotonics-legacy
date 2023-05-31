@@ -5,6 +5,7 @@ import { IconWindowMaximize } from "@tabler/icons-react";
 
 export type PolygonProps = {
   selected?: boolean;
+  hidden?: boolean;
   points: Point[];
   stroke?: string;
   fill?: string;
@@ -19,6 +20,7 @@ export const Polygon = (props: PolygonProps): JSX.Element => {
       strokeWidth={selected ? 2 : 1}
       points={points.map((p) => `${p.x},${p.y}`).join(" ")}
       cursor="pointer"
+      style={{ display: props.hidden ? "none" : undefined }}
       onClick={onClick}
     />
   );
@@ -73,20 +75,17 @@ export const Image = (props: ImageProps): JSX.Element => {
             setViewBox(`0 0 ${box.width} ${box.height}`);
           }}
         />
-        {data.items.map(({ points, labels }, index) =>
-          selectedIndex === undefined || selectedIndex === index ? (
-            <Polygon
-              key={`segment-${index}`}
-              selected={selectedIndex === index}
-              points={(points ?? []) as Point[]}
-              fill="#FFFFFF01"
-              stroke={colors[labels.sort().join("-")]}
-              onClick={() => onClick?.(index)}
-            />
-          ) : (
-            <></>
-          )
-        )}
+        {data.items.map(({ points, labels }, index) => (
+          <Polygon
+            key={`segment-${index}`}
+            hidden={selectedIndex !== undefined && selectedIndex !== index}
+            selected={selectedIndex === index}
+            points={(points ?? []) as Point[]}
+            fill="#FFFFFF01"
+            stroke={colors[labels.sort().join("-")]}
+            onClick={() => onClick?.(index)}
+          />
+        ))}
       </svg>
       {selectedIndex !== undefined && (
         <ActionIcon

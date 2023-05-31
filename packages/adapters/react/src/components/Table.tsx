@@ -19,7 +19,7 @@ export const Table = (props: TableProps): JSX.Element => {
         highlightOnHover
         withColumnBorders
         fontSize="xs"
-        verticalSpacing="xs"
+        verticalSpacing={4}
         sx={{
           width: "100%",
           "&>thead": {
