@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Flex, Center } from "@mantine/core";
+import { Modal, Flex, Center, Divider } from "@mantine/core";
 
 export type DialogProps = React.PropsWithChildren<{
   open: boolean;
@@ -24,10 +24,11 @@ export const Dialog = (props: DialogProps) => {
       size="md"
       styles={(theme) => ({
         ["content"]: {
-          padding: theme.spacing.md,
+          padding: theme.spacing.xs,
         },
       })}
     >
+      <Divider mb="sm" />
       {children}
     </Modal>
   );

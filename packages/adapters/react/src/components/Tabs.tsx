@@ -4,7 +4,7 @@ import { convertCamelCaseToWords } from "@/utils";
 
 export type TabProps = {
   value: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
   children: React.ReactNode;
 };
 
@@ -20,11 +20,12 @@ export const Tab = (props: TabProps) => {
 export type TabsProps = {
   value?: string;
   children: React.ReactNode;
+  defaultValue?: string;
   onChange?: (value: string) => void;
 };
 
 export const Tabs = (props: TabsProps) => {
-  const { value, children, onChange } = props;
+  const { value, children, defaultValue, onChange } = props;
   const viewportRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!viewportRef.current) return;
@@ -33,7 +34,7 @@ export const Tabs = (props: TabsProps) => {
         if (child.props.value === value && viewportRef.current) {
           const left = index * 150;
           if (left < viewportRef.current.scrollLeft)
-            viewportRef.current.scrollLeft = index * 150;
+            viewportRef.current.scrollLeft = index * 150 - 80;
           else if (
             left >
             viewportRef.current.scrollLeft +
@@ -41,7 +42,7 @@ export const Tabs = (props: TabsProps) => {
               150
           )
             viewportRef.current.scrollLeft =
-              index * 150 - viewportRef.current.clientWidth + 150;
+              index * 150 - viewportRef.current.clientWidth + 230;
         }
       }
     });
@@ -54,16 +55,8 @@ export const Tabs = (props: TabsProps) => {
       onTabChange={(value) => {
         onChange?.(value ?? "");
       }}
-      defaultValue={
-        (
-          React.Children.map(children, (child) => {
-            if (React.isValidElement(child)) {
-              return child.props.value;
-            }
-            return undefined;
-          })?.filter((value) => value !== undefined) as string[]
-        )[0]
-      }
+      allowTabDeactivation
+      defaultValue={defaultValue}
     >
       <ScrollArea
         type="never"

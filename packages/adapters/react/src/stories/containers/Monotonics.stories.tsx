@@ -33,7 +33,7 @@ const generateParams = () => {
   return { area, perimeter, roundness };
 };
 
-const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
+const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
   id: `data-${i}`,
   name: `Data ${i + 1}`,
   date: new Date(),

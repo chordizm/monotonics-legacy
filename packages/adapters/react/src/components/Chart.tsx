@@ -43,8 +43,8 @@ export const Chart = (props: ChartProps): JSX.Element => {
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart
             margin={{
-              top: 10,
-              bottom: 10,
+              top: 40,
+              bottom: 20,
               right: 40,
             }}
           >
@@ -61,7 +61,10 @@ export const Chart = (props: ChartProps): JSX.Element => {
               dataKey={yAxis}
               name={yAxis && convertCamelCaseToWords(yAxis)}
             />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} />
+            <Tooltip
+              contentStyle={{ fontSize: "0.8rem", padding: "0.5rem" }}
+              cursor={{ strokeDasharray: "3 3" }}
+            />
             <Scatter
               isAnimationActive={false}
               fontSize="0.8rem"

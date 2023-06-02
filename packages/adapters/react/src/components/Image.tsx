@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Point, Data } from "@monotonics/core";
 import { ActionIcon } from "@mantine/core";
-import { IconWindowMaximize } from "@tabler/icons-react";
+import { IconX } from "@tabler/icons-react";
 
 export type PolygonProps = {
   selected?: boolean;
@@ -81,7 +81,9 @@ export const Image = (props: ImageProps): JSX.Element => {
             hidden={selectedIndex !== undefined && selectedIndex !== index}
             selected={selectedIndex === index}
             points={(points ?? []) as Point[]}
-            fill="#FFFFFF01"
+            fill={colors[labels.sort().join("-")]
+              .replace("hsl", "hsla")
+              .replace(")", ", 0.2)")}
             stroke={colors[labels.sort().join("-")]}
             onClick={() => onClick?.(index)}
           />
@@ -89,11 +91,13 @@ export const Image = (props: ImageProps): JSX.Element => {
       </svg>
       {selectedIndex !== undefined && (
         <ActionIcon
+          size="sm"
+          color="red"
           variant="filled"
-          style={{ position: "absolute", top: "1rem", right: "1rem" }}
+          style={{ position: "absolute", top: "0.8rem", right: "0.8rem" }}
           onClick={() => onClick?.(undefined)}
         >
-          <IconWindowMaximize size={24} />
+          <IconX size={24} />
         </ActionIcon>
       )}
     </div>

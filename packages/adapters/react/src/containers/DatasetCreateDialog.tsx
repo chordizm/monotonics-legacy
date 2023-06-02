@@ -1,11 +1,17 @@
-import { Dialog, Form, Button } from "@/components";
+import { Dialog, Form } from "@/components";
 import { useTasks, useCreateDataset } from "@/store";
+import { IconDatabasePlus } from "@tabler/icons-react";
 
 export const DatasetCreateDialog = (_: {}) => {
   const [tasks] = useTasks();
   const [createDataset] = useCreateDataset();
   return (
-    <Dialog open={true} onClose={() => {}} title="Create Dataset">
+    <Dialog
+      icon={<IconDatabasePlus />}
+      open={true}
+      onClose={() => {}}
+      title="Create Dataset"
+    >
       <Form
         inputs={[
           {

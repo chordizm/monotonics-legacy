@@ -6,8 +6,8 @@ export type LogoProps = {
 export const Logo = (props: LogoProps) => {
   return (
     <svg
-      width="28px"
-      height="28px"
+      width="1.2rem"
+      height="1.2rem"
       viewBox="0 0 133 133"
       version="1.1"
       xmlns="http://www.w3.org/2000/svg"

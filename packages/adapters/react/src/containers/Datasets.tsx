@@ -1,20 +1,34 @@
 import { useDatasets, useSelectedDatasetId } from "@/store";
-import { NavLink } from "@/components";
+import { Accordion, NavLink } from "@/components";
 
 export const Datasets = (_: {}) => {
   const [datasets] = useDatasets();
   const [selectedDatasetId, setSelectedDatasetId] = useSelectedDatasetId();
+
   return (
-    <>
-      {datasets.map(({ id, name, description }) => (
-        <NavLink
-          active={id === selectedDatasetId}
-          key={id}
-          label={name}
-          description={description}
-          onClick={() => setSelectedDatasetId(id)}
-        />
-      ))}
-    </>
+    <Accordion>
+      <div>
+        {datasets.map(({ id, name, description }) => (
+          <NavLink
+            key={id}
+            label={name}
+            description={description}
+            active={id === selectedDatasetId}
+            onClick={() => setSelectedDatasetId(id)}
+          />
+        ))}
+      </div>
+      <div>
+        {datasets.map(({ id, name, description }) => (
+          <NavLink
+            key={id}
+            label={name}
+            description={description}
+            active={id === selectedDatasetId}
+            onClick={() => setSelectedDatasetId(id)}
+          />
+        ))}
+      </div>
+    </Accordion>
   );
 };

@@ -5,43 +5,47 @@ import {
   Flex,
   Text,
   Center,
-  MediaQuery,
+  Box,
 } from "@mantine/core";
 import { HumburgerButton, Logo, Navbar } from "..";
 
 export type AppShellProps = React.PropsWithChildren<{
-  title: React.ReactNode;
-  navbar: {
-    sections: {
-      title: string;
-      component: React.ReactNode;
-    }[];
-  };
+  navbar: React.ReactNode;
 }>;
 
 export const AppShell = (props: AppShellProps) => {
-  const { title, navbar, children } = props;
+  const { navbar, children } = props;
   const [opened, setOpened] = React.useState(false);
   return (
     <MantineAppShell
       header={
-        <Header height={48} p="xs">
+        <Header height={32} p={4}>
           <Flex gap="xs">
             <HumburgerButton
               opened={opened}
               onClick={() => setOpened((value) => !value)}
             />
+
             <Center sx={{ flex: 1 }}>
               <Logo />
-              <Text ff="serif">{title}</Text>
+              <Text fz="xs" ff="serif" sx={{ userSelect: "none" }}>
+                MonoTonics
+              </Text>
             </Center>
-            <MediaQuery largerThan="md" styles={{ display: "none" }}>
-              <span style={{ width: 36 }} />
-            </MediaQuery>
+
+            <Box
+              sx={(theme) => ({
+                [theme.fn.largerThan("md")]: {
+                  height: 22,
+                  width: 0,
+                },
+                width: 36,
+              })}
+            ></Box>
           </Flex>
         </Header>
       }
-      navbar={<Navbar opened={opened} sections={navbar.sections} />}
+      navbar={<Navbar opened={opened}>{navbar}</Navbar>}
       sx={() => ({
         main: {
           paddingTop: "calc(var(--mantine-header-height, 0px))",

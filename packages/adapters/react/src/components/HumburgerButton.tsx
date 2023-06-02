@@ -14,7 +14,7 @@ export const HumburgerButton = (props: HumburgerButtonProps) => {
         <Burger
           opened={opened ?? false}
           onClick={onClick}
-          size="sm"
+          size="xs"
           color={theme.colors.gray[6]}
         />
       </MediaQuery>

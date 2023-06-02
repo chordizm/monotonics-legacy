@@ -1,30 +1,33 @@
 import { Navbar as MantineNavbar } from "@mantine/core";
+import React from "react";
 
-export type NavbarProps = {
-  opened?: boolean;
-  sections: {
+export type NavbarSection = {
+  title: React.ReactNode;
+  icon?: React.ReactNode;
+  links: {
     title: string;
-    component: React.ReactNode;
+    active?: boolean;
+    onClick: () => void;
   }[];
 };
 
+export type NavbarProps = React.PropsWithChildren<{
+  opened: boolean;
+}>;
+
 export const Navbar = (props: NavbarProps) => {
-  const { opened, sections } = props;
+  const { opened, children } = props;
   return (
     <MantineNavbar
       hidden={!opened}
       hiddenBreakpoint="md"
-      width={{ md: 300 }}
+      width={{ md: 240 }}
       sx={{
         height: "calc(100% - var(--mantine-header-height, 0px))",
         overflow: "auto",
       }}
     >
-      {sections.map((section) => (
-        <MantineNavbar.Section key={section.title}>
-          {section.component}
-        </MantineNavbar.Section>
-      ))}
+      {children}
     </MantineNavbar>
   );
 };
