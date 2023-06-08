@@ -9,7 +9,7 @@ export const Default = {
   args: {
     width: "100%",
     height: "100%",
-    src: "https://picsum.photos/seed/0/300/200",
+    src: `/sample.jpg`,
     colors: {
       "label-1": "#ff0000",
       "label-2": "#00ff00",

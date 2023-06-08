@@ -1,6 +1,11 @@
 import { ImageView } from "@/containers";
 import { Provider, createStore } from "jotai";
-import { dataAtom, getImageUrlAtom, selectedDataIdAtom } from "@/store";
+import {
+  dataAtom,
+  useCasesAtom,
+  selectedDataIdAtom,
+  defaultUseCases,
+} from "@/store";
 import { Data, Identity } from "@monotonics/core";
 
 export default {
@@ -22,6 +27,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
   description: `Data ${i + 1} description`,
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
+  params: {},
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateParams();
     return {
@@ -39,9 +45,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
 const defaultStore = createStore();
 defaultStore.set(dataAtom, data);
 defaultStore.set(selectedDataIdAtom, "data-0");
-defaultStore.set(getImageUrlAtom, {
-  execute: (id: Identity) => `https://picsum.photos/seed/${id}/300/200`,
-});
+defaultStore.set(useCasesAtom, defaultUseCases);
 
 export const Default = {
   args: {},

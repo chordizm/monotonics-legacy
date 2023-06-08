@@ -1,4 +1,4 @@
-import { Dataset, DatabaseGateway, Query } from "@monotonics/core";
+import { Dataset, DatabaseGateway, Query, Identity } from "@monotonics/core";
 import { PrismaClient } from "@prisma/client";
 
 const convertDatasetQueryToPrismaQuery = (query: Query<Dataset>) => {
@@ -20,7 +20,7 @@ const convertDatasetQueryToPrismaQuery = (query: Query<Dataset>) => {
 
 export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
   constructor(private readonly prisma: PrismaClient) {}
-  async add(entity: Omit<Dataset, "id">): Promise<Dataset> {
+  async add(entity: Omit<Dataset, "id">): Promise<Identity> {
     const record = await this.prisma.dataset.create({
       data: {
         name: entity.name,
@@ -28,13 +28,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
         description: entity.description,
       },
     });
-    const dataset: Dataset = {
-      id: record.id,
-      name: record.name,
-      taskId: record.taskId,
-      description: record.description,
-    };
-    return dataset;
+    return record.id;
   }
   async get(query?: Query<Dataset>): Promise<Dataset[]> {
     const records = await this.prisma.dataset.findMany({
@@ -48,7 +42,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
     }));
     return datasets;
   }
-  async update(entity: Dataset): Promise<Dataset> {
+  async update(entity: Dataset): Promise<Identity> {
     const record = await this.prisma.dataset.update({
       where: { id: entity.id },
       data: {
@@ -57,13 +51,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
         description: entity.description,
       },
     });
-    const dataset: Dataset = {
-      id: record.id,
-      name: record.name,
-      taskId: record.taskId,
-      description: record.description,
-    };
-    return dataset;
+    return record.id;
   }
   async delete(id: string): Promise<void> {
     await this.prisma.dataset.delete({ where: { id } });

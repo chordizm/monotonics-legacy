@@ -1,11 +1,6 @@
+import { UseCases } from "@/usecases";
 import { getColors } from "@/utils";
-import {
-  Dataset,
-  Data as DomainData,
-  Identity,
-  Task,
-  UseCases,
-} from "@monotonics/core";
+import { Dataset, Data as DomainData, Identity, Task } from "@monotonics/core";
 import { Provider, atom, useAtom, createStore, useAtomValue } from "jotai";
 import React from "react";
 
@@ -13,21 +8,23 @@ type Data = Omit<DomainData, "raw">;
 
 const store = createStore();
 
-export const useCasesAtom = atom<UseCases>({} as any);
+const defaultUseCase = {
+  execute: () => Promise.reject("Not implemented"),
+};
 
-export type GetImageAdapter = {
-  execute: (id: Identity) => string;
+export const defaultUseCases: UseCases = {
+  addData: defaultUseCase,
+  addDataset: defaultUseCase,
+  getDataByDatasetId: defaultUseCase,
+  getDataset: defaultUseCase,
+  getRawData: defaultUseCase,
+  getTasks: defaultUseCase,
+  getDataUrl: {
+    execute: () => "/icon.svg",
+  },
 };
-export const getImageUrlAtom = atom<GetImageAdapter>({
-  execute: () => "",
-});
-export type CreateDatasetAdapter = {
-  execute: (dataset: Omit<Dataset, "id">) => Promise<Dataset>;
-};
-export const createDatasetAtom = atom<CreateDatasetAdapter>({
-  execute: () => Promise.resolve({} as Dataset),
-});
-store.set(getImageUrlAtom, { execute: () => "" });
+
+export const useCasesAtom = atom<UseCases>(defaultUseCases);
 export const tasksAtom = atom<Task[]>([]);
 store.set(tasksAtom, []);
 export const datasetsAtom = atom<Dataset[]>([]);
@@ -80,7 +77,4 @@ export const useSelectedDataId = () => useAtom(deriveSelectedDataIdAtom);
 export const useSelectedData = () => useAtom(selectedDataAtom);
 export const useColors = () => useAtom(colorsAtom);
 export const useSelectedItemIndex = () => useAtom(selectedItemIndexAtom);
-
-export const useGetImageURL = () => useAtom(getImageUrlAtom);
-export const useCreateDataset = () => useAtom(createDatasetAtom);
 export const useUseCases = () => useAtomValue(useCasesAtom);

@@ -1,4 +1,4 @@
-import { Data, DatabaseGateway, Query } from "@monotonics/core";
+import { Data, DatabaseGateway, Identity, Query } from "@monotonics/core";
 import { PrismaClient } from "@prisma/client";
 
 const convertDataQueryToPrismaQuery = (query: Query<Data>) => {
@@ -15,7 +15,7 @@ const convertDataQueryToPrismaQuery = (query: Query<Data>) => {
 export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
   constructor(private readonly prisma: PrismaClient) {}
 
-  async add(entity: Omit<Data, "id">): Promise<Data> {
+  async add(entity: Omit<Data, "id">): Promise<Identity> {
     const record = await this.prisma.data.create({
       data: {
         ...entity,
@@ -23,17 +23,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
         params: JSON.stringify(entity.params),
       },
     });
-    const data: Data = {
-      id: record.id,
-      date: record.date,
-      datasetId: record.datasetId,
-      name: record.name,
-      raw: record.raw,
-      mimeType: record.mimeType,
-      items: record.items,
-      params: JSON.parse(record.params),
-    };
-    return data;
+    return record.id;
   }
   async get(query?: Query<Data>): Promise<Data[]> {
     const records = await this.prisma.data.findMany({
@@ -51,7 +41,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
     return data;
   }
 
-  async update(entity: Data): Promise<Data> {
+  async update(entity: Data): Promise<Identity> {
     const record = await this.prisma.data.update({
       where: { id: entity.id },
       data: {
@@ -60,17 +50,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
         params: JSON.stringify(entity.params),
       },
     });
-    const data: Data = {
-      id: record.id,
-      date: record.date,
-      datasetId: record.datasetId,
-      name: record.name,
-      mimeType: record.mimeType,
-      raw: record.raw,
-      items: record.items as any,
-      params: record.params as any,
-    };
-    return data;
+    return record.id;
   }
 
   async delete(id: string): Promise<void> {

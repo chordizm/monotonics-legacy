@@ -5,7 +5,8 @@ import {
   datasetsAtom,
   selectedDatasetIdAtom,
   dataAtom,
-  getImageUrlAtom,
+  useCasesAtom,
+  defaultUseCases,
 } from "@/store";
 import { Data, Dataset, Identity, Task } from "@monotonics/core";
 
@@ -40,6 +41,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
   description: `Data ${i + 1} description`,
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
+  params: {},
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateParams();
     return {
@@ -58,9 +60,8 @@ const defaultStore = createStore();
 defaultStore.set(datasetsAtom, datasets);
 defaultStore.set(tasksAtom, tasks);
 defaultStore.set(dataAtom, data);
-defaultStore.set(getImageUrlAtom, {
-  execute: (id: Identity) => `https://picsum.photos/seed/${id}/300/200`,
-});
+defaultStore.set(useCasesAtom, defaultUseCases);
+
 export const Default = {
   args: {},
   decorators: [

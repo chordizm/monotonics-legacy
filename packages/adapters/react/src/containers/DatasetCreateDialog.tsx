@@ -1,10 +1,10 @@
 import { Dialog, Form } from "@/components";
-import { useTasks, useCreateDataset } from "@/store";
+import { useTasks, useUseCases } from "@/store";
 import { IconDatabasePlus } from "@tabler/icons-react";
 
 export const DatasetCreateDialog = (_: {}) => {
   const [tasks] = useTasks();
-  const [createDataset] = useCreateDataset();
+  const useCases = useUseCases();
   return (
     <Dialog
       icon={<IconDatabasePlus />}
@@ -47,7 +47,7 @@ export const DatasetCreateDialog = (_: {}) => {
           },
         ]}
         onSubmit={(values) => {
-          createDataset.execute({
+          useCases.addDataset.execute({
             name: values["name"].toString(),
             description: values["description"]?.toString() ?? "",
             taskId: values[2].toString(),

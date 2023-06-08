@@ -2,7 +2,7 @@ import {
   useSelectedItemIndex,
   useColors,
   useSelectedData,
-  useGetImageURL,
+  useUseCases,
 } from "@/store";
 import { getViewBox } from "@/utils";
 import { Image } from "@/components";
@@ -12,10 +12,10 @@ export const ImageView = (_: {}) => {
   const [data] = useSelectedData();
   const [selectedIndex, setSelectedIndex] = useSelectedItemIndex();
   const [colors] = useColors();
-  const [getImageURL] = useGetImageURL();
+  const useCases = useUseCases();
   return data ? (
     <Image
-      src={getImageURL.execute(data.id)}
+      src={useCases.getDataUrl.execute(data.id)}
       colors={colors}
       data={data}
       selectedIndex={selectedIndex}

@@ -34,8 +34,8 @@ export type TaskRunnerGateway = {
 };
 
 export type DatabaseGateway<T extends Identified> = {
-  add: (entity: Omit<T, "id">) => Promise<T>;
+  add: (entity: Omit<T, "id">) => Promise<Identity>;
   get: (query?: Query<T>) => Promise<T[]>;
-  update: (entity: T) => Promise<T>;
+  update: (entity: T) => Promise<Identity>;
   delete: (id: Identity) => Promise<void>;
 };
