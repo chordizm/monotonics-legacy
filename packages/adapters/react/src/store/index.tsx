@@ -1,11 +1,19 @@
 import { getColors } from "@/utils";
-import { Dataset, Data as DomainData, Identity, Task } from "@monotonics/core";
-import { Provider, atom, useAtom, createStore } from "jotai";
+import {
+  Dataset,
+  Data as DomainData,
+  Identity,
+  Task,
+  UseCases,
+} from "@monotonics/core";
+import { Provider, atom, useAtom, createStore, useAtomValue } from "jotai";
 import React from "react";
 
 type Data = Omit<DomainData, "raw">;
 
 const store = createStore();
+
+export const useCasesAtom = atom<UseCases>({} as any);
 
 export type GetImageAdapter = {
   execute: (id: Identity) => string;
@@ -75,3 +83,4 @@ export const useSelectedItemIndex = () => useAtom(selectedItemIndexAtom);
 
 export const useGetImageURL = () => useAtom(getImageUrlAtom);
 export const useCreateDataset = () => useAtom(createDatasetAtom);
+export const useUseCases = () => useAtomValue(useCasesAtom);
