@@ -40,7 +40,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
     const records = await this.prisma.dataset.findMany({
       where: query && convertDatasetQueryToPrismaQuery(query),
     });
-    const datasets: Dataset[] = records.map((d) => ({
+    const datasets: Dataset[] = records.map((d: any) => ({
       id: d.id,
       name: d.name,
       taskId: d.taskId,

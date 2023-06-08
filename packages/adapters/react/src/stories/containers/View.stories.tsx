@@ -15,11 +15,18 @@ export default {
   component: View,
 };
 
-const generateParams = () => {
+const generateItemParams = () => {
   const area = Math.random() * 1000;
   const perimeter = Math.random() * 400;
   const roundness = (4 * Math.PI * area) / Math.pow(perimeter, 2);
   return { area, perimeter, roundness };
+};
+
+const generateDataParams = () => {
+  const max = Math.random() * 1000;
+  const min = Math.random() * 1000;
+  const average = Math.random() * 1000;
+  return { max, min, average };
 };
 
 const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
@@ -30,7 +37,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
   items: Array.from({ length: 100 }).map((_, j) => {
-    const params = generateParams();
+    const params = generateItemParams();
     return {
       ...params,
       labels: [params.roundness > 0.8 ? "circle" : "square"],
@@ -41,6 +48,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
       ],
     };
   }),
+  params: generateDataParams(),
 }));
 
 const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({

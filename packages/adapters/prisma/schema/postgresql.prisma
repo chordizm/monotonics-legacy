@@ -23,5 +23,6 @@ model Data {
     name        String
     mimeType    String
     raw         Bytes
+    items       Json
     params      Json
 }

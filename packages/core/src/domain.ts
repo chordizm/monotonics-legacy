@@ -20,6 +20,7 @@ export type Data = Entity<{
   mimeType: string;
   raw: Buffer;
   items: Item[];
+  params: Record<string, unknown>;
 }>;
 
 export type Task = Entity<{ name: string; mimeType: string }>;

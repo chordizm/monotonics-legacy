@@ -19,6 +19,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
     const record = await this.prisma.data.create({
       data: {
         ...entity,
+        items: JSON.stringify(entity.items),
         params: JSON.stringify(entity.params),
       },
     });
@@ -29,6 +30,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
       name: record.name,
       raw: record.raw,
       mimeType: record.mimeType,
+      items: record.items,
       params: JSON.parse(record.params),
     };
     return data;
@@ -37,7 +39,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
     const records = await this.prisma.data.findMany({
       where: query && convertDataQueryToPrismaQuery(query),
     });
-    const data: Data[] = records.map((d) => ({
+    const data: Data[] = records.map((d: any) => ({
       id: d.id,
       date: d.date,
       datasetId: d.datasetId,
@@ -54,6 +56,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
       where: { id: entity.id },
       data: {
         ...entity,
+        items: JSON.stringify(entity.items),
         params: JSON.stringify(entity.params),
       },
     });
@@ -64,6 +67,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
       name: record.name,
       mimeType: record.mimeType,
       raw: record.raw,
+      items: record.items as any,
       params: record.params as any,
     };
     return data;
