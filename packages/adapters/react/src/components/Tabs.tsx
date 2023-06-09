@@ -55,7 +55,6 @@ export const Tabs = (props: TabsProps) => {
       onTabChange={(value) => {
         onChange?.(value ?? "");
       }}
-      allowTabDeactivation
       defaultValue={defaultValue}
     >
       <ScrollArea
