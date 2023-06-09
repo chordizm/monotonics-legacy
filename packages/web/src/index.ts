@@ -9,14 +9,14 @@ import { PrismaClient } from "@prisma/client";
 import { LocalSettings } from "@node-red/runtime";
 import {
   Adapters,
-  AddDataUseCase,
-  AddDatasetUseCase,
+  AddData,
+  CreateDataset,
   DataRepository,
   DatasetRepository,
-  GetDataByDatasetIdUseCase,
-  GetDatasetUseCase,
-  GetRawDataUseCase,
-  GetTaskUseCase,
+  GetDataByDatasetId,
+  GetDataset,
+  GetRawData,
+  GetTasks,
   Services,
   TaskRepository,
   TaskRunner,
@@ -66,12 +66,12 @@ const services: Services = {
   },
 };
 const usecases: UseCases = {
-  addData: new AddDataUseCase(services),
-  addDataset: new AddDatasetUseCase(services),
-  getDataByDatasetId: new GetDataByDatasetIdUseCase(services),
-  getDataset: new GetDatasetUseCase(services),
-  getRawData: new GetRawDataUseCase(services),
-  getTask: new GetTaskUseCase(services),
+  addData: new AddData(services),
+  createDataset: new CreateDataset(services),
+  getDataByDatasetId: new GetDataByDatasetId(services),
+  getDataset: new GetDataset(services),
+  getRawData: new GetRawData(services),
+  getTasks: new GetTasks(services),
 };
 
 RED.init(server, settings);
