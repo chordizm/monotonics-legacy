@@ -6,8 +6,7 @@ import {
   selectedDatasetIdAtom,
   tasksAtom,
   selectedDataIdAtom,
-  useCasesAtom,
-  defaultUseCases,
+  UrlResolverAtom
 } from "@/store";
 import { Task, Data, Dataset, Identity } from "@monotonics/core";
 
@@ -56,7 +55,7 @@ const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `dataset-${i}`,
   name: `Dataset ${i + 1}`,
   description: `Dataset ${i + 1} description`,
-  taskId: `task-${i}`,
+  mimeType: "image/jpeg",
 }));
 const tasks: Task[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `task-${i}`,
@@ -71,7 +70,9 @@ defaultStore.set(tasksAtom, tasks);
 defaultStore.set(dataAtom, data);
 defaultStore.set(selectedDataIdAtom, "data-0");
 defaultStore.set(selectedDatasetIdAtom, "dataset-0");
-defaultStore.set(useCasesAtom, defaultUseCases);
+defaultStore.set(UrlResolverAtom, {
+    getUrl: (id: Identity) => `/sample.jpg`,
+});
 export const Default = {
   args: {},
   decorators: [

@@ -9,8 +9,8 @@ const convertDatasetQueryToPrismaQuery = (query: Query<Dataset>) => {
   if (query?.filter?.name?.$eq !== undefined) {
     prismaQuery.name = query.filter.name.$eq;
   }
-  if (query?.filter?.taskId?.$eq !== undefined) {
-    prismaQuery.taskId = query.filter.taskId.$eq;
+  if (query?.filter?.mimeType?.$eq !== undefined) {
+    prismaQuery.mimeType = query.filter.mimeType.$eq;
   }
   if (query?.filter?.description?.$eq !== undefined) {
     prismaQuery.description = query.filter.description.$eq;
@@ -24,7 +24,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
     const record = await this.prisma.dataset.create({
       data: {
         name: entity.name,
-        taskId: entity.taskId,
+        mimeType: entity.mimeType,
         description: entity.description,
       },
     });
@@ -37,7 +37,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
     const datasets: Dataset[] = records.map((d: any) => ({
       id: d.id,
       name: d.name,
-      taskId: d.taskId,
+      mimeType: d.mimeType,
       description: d.description,
     }));
     return datasets;
@@ -47,7 +47,7 @@ export class SQLiteDatasetDatabaseAdapter implements DatabaseGateway<Dataset> {
       where: { id: entity.id },
       data: {
         name: entity.name,
-        taskId: entity.taskId,
+        mimeType: entity.mimeType,
         description: entity.description,
       },
     });

@@ -1,7 +1,7 @@
 import { action } from "@storybook/addon-actions";
 import { DatasetCreateDialog } from "@/containers";
 import { Provider, createStore } from "jotai";
-import { tasksAtom, datasetsAtom, dataAtom, useCasesAtom } from "@/store";
+import { tasksAtom, datasetsAtom, dataAtom } from "@/store";
 import { Data, Dataset, Task } from "@monotonics/core";
 
 export default {
@@ -13,7 +13,7 @@ const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `dataset-${i}`,
   name: `Dataset ${i + 1}`,
   description: `Dataset ${i + 1} description`,
-  taskId: `task-${i}`,
+  mimeType: "image/jpeg",
 }));
 const tasks: Task[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `task-${i}`,
@@ -54,14 +54,6 @@ const defaultStore = createStore();
 defaultStore.set(datasetsAtom, datasets);
 defaultStore.set(tasksAtom, tasks);
 defaultStore.set(dataAtom, data);
-defaultStore.set(useCasesAtom, {
-  createDataset: {
-    execute: (dataset: Omit<Dataset, "id">) => {
-      action("createDatasetAtom.execute")(dataset);
-      return Promise.resolve({ id: "test", ...dataset });
-    },
-  },
-} as any);
 export const Default = {
   args: {},
   decorators: [

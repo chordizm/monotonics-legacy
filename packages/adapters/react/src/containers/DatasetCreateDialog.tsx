@@ -1,10 +1,10 @@
 import { Dialog, Form } from "@/components";
-import { useTasks, useUseCases } from "@/store";
+import { useServices } from "@/store";
+import { CreateDataset } from "@monotonics/core";
 import { IconDatabasePlus } from "@tabler/icons-react";
 
 export const DatasetCreateDialog = (_: {}) => {
-  const [tasks] = useTasks();
-  const useCases = useUseCases();
+  const services = useServices();
   return (
     <Dialog
       icon={<IconDatabasePlus />}
@@ -31,26 +31,27 @@ export const DatasetCreateDialog = (_: {}) => {
               return null;
             },
           },
-          {
-            label: "Task",
-            type: "select",
-            options: tasks.map((task) => ({
-              value: task.id,
-              label: task.name,
-            })),
-            validate: (value) => {
-              if (value === "") {
-                return "Task cannot be empty";
-              }
-              return null;
-            },
-          },
+        //   {
+        //     label: "Task",
+        //     type: "select",
+        //     options: tasks.map((task) => ({
+        //       value: task.id,
+        //       label: task.name,
+        //     })),
+        //     validate: (value) => {
+        //       if (value === "") {
+        //         return "Task cannot be empty";
+        //       }
+        //       return null;
+        //     },
+        //   },
         ]}
         onSubmit={(values) => {
-          useCases.addDataset.execute({
+          const usecase = new CreateDataset(services);
+          usecase.execute({
             name: values["name"].toString(),
             description: values["description"]?.toString() ?? "",
-            taskId: values[2].toString(),
+            mimeType: "image/*",
           });
         }}
       >

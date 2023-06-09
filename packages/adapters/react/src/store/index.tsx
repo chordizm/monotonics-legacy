@@ -1,6 +1,6 @@
 import { UseCases } from "@/usecases";
 import { getColors } from "@/utils";
-import { Dataset, Data as DomainData, Identity, Task } from "@monotonics/core";
+import { Dataset, Data as DomainData, Task, Adapters, Services, TaskRunner, DataRepository, DatasetRepository, TaskRepository, Identity } from "@monotonics/core";
 import { Provider, atom, useAtom, createStore, useAtomValue } from "jotai";
 import React from "react";
 
@@ -8,23 +8,42 @@ type Data = Omit<DomainData, "raw">;
 
 const store = createStore();
 
-const defaultUseCase = {
-  execute: () => Promise.reject("Not implemented"),
-};
+const throwNotImplementedException = () => {
+    throw new Error("Not implemented");
+}
+const defaultRepository = {
+    add: throwNotImplementedException,
+    get: throwNotImplementedException,
+    update: throwNotImplementedException,
+    delete: throwNotImplementedException,
+}
 
-export const defaultUseCases: UseCases = {
-  addData: defaultUseCase,
-  addDataset: defaultUseCase,
-  getDataByDatasetId: defaultUseCase,
-  getDataset: defaultUseCase,
-  getRawData: defaultUseCase,
-  getTasks: defaultUseCase,
-  getDataUrl: {
-    execute: () => "/icon.svg",
-  },
-};
+export const adaptersAtom = atom<Adapters>({
+    gateways: {
+        taskRunner: { run: throwNotImplementedException },
+        data: defaultRepository,
+        dataset: defaultRepository,
+        task: defaultRepository,
+    },
+    controllers: {},
+    presenters: {},
+});
 
-export const useCasesAtom = atom<UseCases>(defaultUseCases);
+export const servicesAtom = atom<Services>((get) => {
+    const adapters = get(adaptersAtom);
+    return {
+        taskRunner: new TaskRunner(adapters),
+        repositories: {
+            data: new DataRepository(adapters),
+            dataset: new DatasetRepository(adapters),
+            task: new TaskRepository(adapters)
+        }
+    }
+});
+
+export const UrlResolverAtom = atom<{ getUrl: (id: Identity) => string }>({
+    getUrl: throwNotImplementedException
+});
 export const tasksAtom = atom<Task[]>([]);
 store.set(tasksAtom, []);
 export const datasetsAtom = atom<Dataset[]>([]);
@@ -34,11 +53,8 @@ store.set(selectedDatasetIdAtom, undefined);
 export const datasetAtom = atom<Dataset | undefined>((get) => {
   return get(datasetsAtom).find(({ id }) => id === get(selectedDatasetIdAtom));
 });
-export const taskAtom = atom<Task | undefined>((get) => {
-  return get(tasksAtom).find(({ id }) => id === get(datasetAtom)?.taskId);
-});
 export const mimeTypeAtom = atom<string | undefined>((get) => {
-  return get(taskAtom)?.mimeType;
+  return get(datasetAtom)?.mimeType;
 });
 export const dataAtom = atom<Data[]>([]);
 store.set(dataAtom, []);
@@ -71,10 +87,10 @@ export const useDatasets = () => useAtom(datasetsAtom);
 export const useSelectedDatasetId = () => useAtom(selectedDatasetIdAtom);
 export const useData = () => useAtom(dataAtom);
 export const useTasks = () => useAtom(tasksAtom);
-export const useTask = () => useAtom(taskAtom);
 export const useMimeType = () => useAtom(mimeTypeAtom);
 export const useSelectedDataId = () => useAtom(deriveSelectedDataIdAtom);
 export const useSelectedData = () => useAtom(selectedDataAtom);
 export const useColors = () => useAtom(colorsAtom);
 export const useSelectedItemIndex = () => useAtom(selectedItemIndexAtom);
-export const useUseCases = () => useAtomValue(useCasesAtom);
+export const useServices = () => useAtomValue(servicesAtom);
+export const useUrlResolver = () => useAtomValue(UrlResolverAtom);

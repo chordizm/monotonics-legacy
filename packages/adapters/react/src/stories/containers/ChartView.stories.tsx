@@ -22,6 +22,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
   description: `Data ${i + 1} description`,
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
+  params: {},
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateParams();
     return {
