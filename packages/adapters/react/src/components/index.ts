@@ -1,4 +1,3 @@
-export * from "./Accordion";
 export * from "./AppShell";
 export * from "./Button";
 export * from "./Chart";

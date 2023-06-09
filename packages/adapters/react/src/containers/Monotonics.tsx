@@ -1,9 +1,9 @@
 import { AppShell } from "..";
-import { Datasets, View } from ".";
+import { Datasets,Tasks, View } from ".";
 
 export const Monotonics = (_: {}): JSX.Element => {
   return (
-    <AppShell navbar={<Datasets />}>
+    <AppShell navbar={[<Datasets />,<Tasks/>]}>
       <View />
     </AppShell>
   );
