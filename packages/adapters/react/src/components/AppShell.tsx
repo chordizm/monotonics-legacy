@@ -10,7 +10,12 @@ import {
 import { HumburgerButton, Logo, Navbar } from "..";
 
 export type AppShellProps = React.PropsWithChildren<{
-  navbar: React.ReactNode;
+  navbar: {
+    icon: React.ReactNode;
+    action: React.ReactNode;
+    title: string;
+    content: React.ReactNode;
+  };
 }>;
 
 export const AppShell = (props: AppShellProps) => {
@@ -45,7 +50,16 @@ export const AppShell = (props: AppShellProps) => {
           </Flex>
         </Header>
       }
-      navbar={<Navbar opened={opened}>{navbar}</Navbar>}
+      navbar={
+        <Navbar
+          title={navbar.title}
+          icon={navbar.icon}
+          action={navbar.action}
+          opened={opened}
+        >
+          {navbar.content}
+        </Navbar>
+      }
       sx={() => ({
         main: {
           paddingTop: "calc(var(--mantine-header-height, 0px))",

@@ -1,19 +1,19 @@
 import { action } from "@storybook/addon-actions";
-import { DatasetCreateDialog } from "@/containers";
+import { CreateDatasetButton } from "@/containers";
 import { Provider, createStore } from "jotai";
 import { tasksAtom, datasetsAtom, dataAtom } from "@/store";
 import { Data, Dataset, Task } from "@monotonics/core";
 
 export default {
-  title: "Containers/DatasetCreateDialog",
-  component: DatasetCreateDialog,
+  title: "Containers/CreateDatasetButton",
+  component: CreateDatasetButton,
 };
 
 const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `dataset-${i}`,
   name: `Dataset ${i + 1}`,
   description: `Dataset ${i + 1} description`,
-  mimeType: "image/jpeg",
+  taskId: "task-0",
 }));
 const tasks: Task[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `task-${i}`,

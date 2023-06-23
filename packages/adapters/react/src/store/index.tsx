@@ -1,6 +1,17 @@
-import { UseCases } from "@/usecases";
+import { Adapters } from "@/adapters";
 import { getColors } from "@/utils";
-import { Dataset, Data as DomainData, Task, Adapters, Services, TaskRunner, DataRepository, DatasetRepository, TaskRepository, Identity } from "@monotonics/core";
+import {
+  Dataset,
+  Data as DomainData,
+  Task,
+  Services,
+  TaskRunner,
+  DataRepository,
+  DatasetRepository,
+  TaskRepository,
+  Identity,
+} from "@monotonics/core";
+import { ResultRepository } from "@monotonics/core/dist/services/ResultRepository";
 import { Provider, atom, useAtom, createStore, useAtomValue } from "jotai";
 import React from "react";
 
@@ -9,40 +20,41 @@ type Data = Omit<DomainData, "raw">;
 const store = createStore();
 
 const throwNotImplementedException = () => {
-    throw new Error("Not implemented");
-}
+  throw new Error("Not implemented");
+};
 const defaultRepository = {
-    add: throwNotImplementedException,
-    get: throwNotImplementedException,
-    update: throwNotImplementedException,
-    delete: throwNotImplementedException,
-}
+  add: throwNotImplementedException,
+  get: throwNotImplementedException,
+  update: throwNotImplementedException,
+  delete: throwNotImplementedException,
+};
 
 export const adaptersAtom = atom<Adapters>({
-    gateways: {
-        taskRunner: { run: throwNotImplementedException },
-        data: defaultRepository,
-        dataset: defaultRepository,
-        task: defaultRepository,
-    },
-    controllers: {},
-    presenters: {},
+  gateways: {
+    taskRunner: { run: throwNotImplementedException },
+    dataUrlResolver: { resolve: throwNotImplementedException },
+    data: defaultRepository,
+    dataset: defaultRepository,
+    task: defaultRepository,
+  },
+  controllers: {},
+  presenters: {},
 });
 
 export const servicesAtom = atom<Services>((get) => {
-    const adapters = get(adaptersAtom);
-    return {
-        taskRunner: new TaskRunner(adapters),
-        repositories: {
-            data: new DataRepository(adapters),
-            dataset: new DatasetRepository(adapters),
-            task: new TaskRepository(adapters)
-        }
-    }
+  const adapters = get(adaptersAtom);
+  return {
+    taskRunner: new TaskRunner(adapters),
+    repositories: {
+      data: new DataRepository(adapters),
+      dataset: new DatasetRepository(adapters),
+      task: new TaskRepository(adapters),
+    },
+  };
 });
 
 export const UrlResolverAtom = atom<{ getUrl: (id: Identity) => string }>({
-    getUrl: throwNotImplementedException
+  getUrl: throwNotImplementedException,
 });
 export const tasksAtom = atom<Task[]>([]);
 store.set(tasksAtom, []);
@@ -54,7 +66,10 @@ export const datasetAtom = atom<Dataset | undefined>((get) => {
   return get(datasetsAtom).find(({ id }) => id === get(selectedDatasetIdAtom));
 });
 export const mimeTypeAtom = atom<string | undefined>((get) => {
-  return get(datasetAtom)?.mimeType;
+  const tasks = get(tasksAtom);
+  const dataset = get(datasetAtom);
+  const task = tasks.find(({ id }) => id === dataset?.taskId);
+  return task?.mimeType;
 });
 export const dataAtom = atom<Data[]>([]);
 store.set(dataAtom, []);
