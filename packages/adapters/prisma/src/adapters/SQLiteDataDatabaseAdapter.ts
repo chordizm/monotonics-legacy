@@ -37,6 +37,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
       raw: d.raw,
       mimeType: d.mimeType,
       params: JSON.parse(d.params),
+      items: JSON.parse(d.items),
     }));
     return data;
   }

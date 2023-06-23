@@ -9,9 +9,9 @@ datasource db {
 
 model Dataset {
     id            String  @id @default(uuid())
+    taskId        String
     name          String  @unique
     description   String
-    taskId        String
     data          Data[]
 }
 
