@@ -13,8 +13,9 @@ export type UseCase<Payload, Result> = {
 export type AsyncUseCase<Payload, Result> = UseCase<Payload, Promise<Result>>;
 
 export type AddDataUseCase = AsyncUseCase<Omit<Data, "id">, Identity>;
-export type UpdateDataUseCase = AsyncUseCase<Pick<Data, "items">, Identity>;
 export type GetDataByDatasetIdUseCase = AsyncUseCase<Identity, Data[]>;
+
+export type UpdateDataUseCase = AsyncUseCase<Data, Identity>;
 
 export type CreateDatasetUseCase = AsyncUseCase<Omit<Dataset, "id">, Identity>;
 export type GetDatasetUseCase = AsyncUseCase<Identity, Dataset[]>;
@@ -29,4 +30,5 @@ export type UseCases = {
   getDataset: GetDatasetUseCase;
   getRawData: GetRawDataUseCase;
   getTasks: GetTasksUseCase;
+  updateData: UpdateDataUseCase;
 };

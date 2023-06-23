@@ -4,8 +4,8 @@ export type Identified = { id: Identity };
 export type Entity<T> = Identified & T;
 
 export type Dataset = Entity<{
+  taskId: Identity;
   name: string;
-  mimeType: string;
   description: string;
 }>;
 
