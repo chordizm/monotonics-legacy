@@ -18,6 +18,7 @@ export const Polygon = (props: PolygonProps): JSX.Element => {
       fill={fill ?? "rgba(206, 55, 47, 0.2)"}
       stroke={stroke ?? "rgb(206, 55, 47)"}
       strokeWidth={selected ? 2 : 1}
+      strokeLinejoin="bevel"
       points={points.map((p) => `${p.x},${p.y}`).join(" ")}
       cursor="pointer"
       style={{ display: props.hidden ? "none" : undefined }}
