@@ -11,7 +11,7 @@ export const datasetRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.usecases.addDataset.execute(input);
+      return ctx.usecases.createDataset.execute(input);
     }),
   list: publicProcedure
     .input(
@@ -21,7 +21,7 @@ export const datasetRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      return ctx.usecases.getDataset.execute();
+      return ctx.usecases.getDatasets.execute(undefined);
     }),
   addData: publicProcedure
     .input(
@@ -38,6 +38,7 @@ export const datasetRouter = router({
         raw: Buffer.from(input.data.split(",")[1], "base64"),
         mimeType: input.data.split(",")[0].split(";")[0].split(":")[1],
         name: input.name ?? "",
+        items: [],
         params: {
           segments: [
             {

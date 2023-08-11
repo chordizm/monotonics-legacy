@@ -31,7 +31,9 @@ export default function (RED: NodeAPI) {
       (
         (RED.settings.functionGlobalContext as any)?.usecases as UseCases
       )?.getRawData
-        .execute(payload.id)
+        .execute({
+          id: payload.id,
+        })
         .then((data) => {
           send?.({
             payload: { ...payload, size: data.length, blob: data },
