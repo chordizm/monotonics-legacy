@@ -11,6 +11,6 @@ export const taskRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      return ctx.usecases.getTask.execute();
+      return ctx.usecases.getTasks.execute(undefined);
     }),
 });
