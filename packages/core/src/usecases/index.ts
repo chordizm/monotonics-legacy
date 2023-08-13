@@ -50,3 +50,20 @@ export type UseCases = {
   getTasks: GetTasksUseCase;
   updateData: UpdateDataUseCase;
 };
+
+const defaultUseCase: UseCase<any, any> = {
+  execute: () => {
+    throw new Error("Not implemented");
+  },
+};
+
+export const useCases: UseCases = {
+  addData: defaultUseCase,
+  createDataset: defaultUseCase,
+  getDataByDatasetId: defaultUseCase,
+  getDatasets: defaultUseCase,
+  getDataset: defaultUseCase,
+  getRawData: defaultUseCase,
+  getTasks: defaultUseCase,
+  updateData: defaultUseCase,
+};
