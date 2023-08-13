@@ -8,20 +8,28 @@ import registerMonotonicNodeTypes from "./nodes";
 
 export * from "./adapters";
 
+const defaultSettings: LocalSettings = {
+  uiPort: +(process.env.PORT || 1880),
+  uiHost: process.env.HOST || "localhost",
+  httpAdminRoot: "/red",
+  httpNodeRoot: "/api",
+  userDir: path.join(os.homedir(), ".monotonics"),
+};
+
 export const init = <
   Request extends typeof IncomingMessage,
   Response extends typeof ServerResponse
 >(
   server: Server<Request, Response>,
-  settings: LocalSettings,
-  usecases: UseCases
+  usecases: UseCases,
+  settings?: LocalSettings
 ) => {
   const _settings = {
+    ...defaultSettings,
     ...settings,
-    functionGlobalContext: { ...settings.functionGlobalContext, usecases },
-    userDir: path.join(os.homedir(), ".monotonics"),
+    functionGlobalContext: { ...settings?.functionGlobalContext, usecases },
   };
-  RED.init(server, settings);
+  RED.init(server, _settings);
 };
 
 export default function (RED: any) {
