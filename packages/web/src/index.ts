@@ -1,12 +1,9 @@
 import express from "express";
 import next from "next";
 import http from "http";
-import os from "os";
-import path from "path";
 import RED from "node-red";
 import bodyParser from "body-parser";
 import { PrismaClient } from "@prisma/client";
-import { LocalSettings } from "@node-red/runtime";
 import {
   Adapters,
   AddData,
@@ -22,11 +19,12 @@ import {
   Services,
   TaskRepository,
   TaskRunner,
-  UseCases,
+  useCases,
 } from "@monotonics/core";
 import {
   NodeRedTaskDatabaseAdapter,
   NodeRedTaskRunner,
+  init as initNodeRed,
 } from "@monotonics/adapter_node-red";
 import {
   SQLiteDataDatabaseAdapter,
@@ -38,14 +36,7 @@ const app = express();
 const nextApp = next({ dev });
 const server = http.createServer(app);
 
-const settings: LocalSettings = {
-  uiPort: +(process.env.PORT || 1880),
-  uiHost: process.env.HOST || "localhost",
-  httpAdminRoot: "/red",
-  httpNodeRoot: "/api",
-  userDir: path.join(os.homedir(), ".monotonics"),
-  //    functionGlobalContext: { context },
-};
+initNodeRed(server, useCases);
 
 const prisma = new PrismaClient();
 
@@ -67,18 +58,15 @@ const services: Services = {
     task: new TaskRepository(adapters),
   },
 };
-const usecases: UseCases = {
-  addData: new AddData(services),
-  createDataset: new CreateDataset(services),
-  getDataByDatasetId: new GetDataByDatasetId(services),
-  updateData: new UpdateData(services),
-  getDatasets: new GetDatasets(services),
-  getDataset: new GetDataset(services),
-  getRawData: new GetRawData(services),
-  getTasks: new GetTasks(services),
-};
+useCases.addData = new AddData(services);
+useCases.createDataset = new CreateDataset(services);
+useCases.getDataByDatasetId = new GetDataByDatasetId(services);
+useCases.updateData = new UpdateData(services);
+useCases.getDatasets = new GetDatasets(services);
+useCases.getDataset = new GetDataset(services);
+useCases.getRawData = new GetRawData(services);
+useCases.getTasks = new GetTasks(services);
 
-RED.init(server, settings);
 app.use("/red", RED.httpAdmin);
 app.use("/api", RED.httpNode);
 app.use(bodyParser.urlencoded({ extended: true, limit: "500mb" }));
@@ -88,7 +76,7 @@ const handle = nextApp.getRequestHandler();
 app.all(
   "*",
   (req, res, next) => {
-    (req as any).usecases = usecases;
+    (req as any).usecases = useCases;
     next();
   },
   (req, res) => {
