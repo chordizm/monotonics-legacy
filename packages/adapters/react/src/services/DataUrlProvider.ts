@@ -1,4 +1,4 @@
-import { Adapters } from "@/adapters";
+import { Adapters } from "../adapters";
 import { Identity } from "@monotonics/core";
 
 export class DataUrlProvider {

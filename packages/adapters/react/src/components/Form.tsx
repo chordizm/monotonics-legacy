@@ -4,6 +4,7 @@ import React from "react";
 
 export type Input = {
   type: "text" | "select";
+  name: string;
   initialValue?: string | number;
   label: string;
   options?: { value: string; label: string }[];
@@ -20,10 +21,10 @@ export const Form = (props: FormProps) => {
   const { inputs, onSubmit, children } = props;
   const form = useForm({
     initialValues: Object.fromEntries(
-      inputs.map((input) => [input.label, input.initialValue ?? ""])
+      inputs.map((input) => [input.name, input.initialValue ?? ""])
     ),
     validate: Object.fromEntries(
-      inputs.map((input) => [input.label, input.validate])
+      inputs.map((input) => [input.name, input.validate])
     ),
   });
   return (
@@ -32,26 +33,26 @@ export const Form = (props: FormProps) => {
         input.type === "text" ? (
           <TextInput
             key={input.label}
+            name={input.name}
             label={input.label}
-            value={form.values[input.label]}
+            value={form.values[input.name]}
             onChange={(event) =>
-              form.setFieldValue(input.label, event.currentTarget.value)
+              form.setFieldValue(input.name, event.currentTarget.value)
             }
             description={input.description}
-            error={form.errors[input.label]}
+            error={form.errors[input.name]}
             style={{ marginBottom: 15 }}
           />
         ) : (
           <Select
             key={input.label}
+            name={input.name}
             label={input.label}
-            value={form.values[input.label].toString()}
-            onChange={(value) =>
-              value && form.setFieldValue(input.label, value)
-            }
+            value={form.values[input.name].toString()}
+            onChange={(value) => value && form.setFieldValue(input.name, value)}
             description={input.description}
             data={input?.options ?? []}
-            error={form.errors[input.label]}
+            error={form.errors[input.name]}
             style={{ marginBottom: 15 }}
           />
         )

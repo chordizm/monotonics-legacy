@@ -16,4 +16,14 @@ export const dataRouter = router({
       );
       return data;
     }),
+  getById: publicProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      })
+    )
+    .query(async ({ input, ctx }) => {
+      const data = await ctx.usecases.getDataByDatasetId.execute(input.id);
+      return data;
+    }),
 });

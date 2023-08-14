@@ -1,5 +1,5 @@
-import { useData, useSelectedDataId, useUrlResolver } from "@/store";
-import { Thumbnail, GridView } from "@/components";
+import { useData, useSelectedDataId, useUrlResolver } from "../hooks";
+import { Thumbnail, GridView } from "../components";
 
 export const ThumbnailView = (_: {}) => {
   const [data] = useData();

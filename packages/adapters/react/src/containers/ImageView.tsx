@@ -3,9 +3,9 @@ import {
   useColors,
   useSelectedData,
   useUrlResolver,
-} from "@/store";
-import { getViewBox } from "@/utils";
-import { Image } from "@/components";
+} from "../hooks";
+import { getViewBox } from "../utils";
+import { Image } from "../components";
 import { Point } from "@monotonics/core";
 
 export const ImageView = (_: {}) => {

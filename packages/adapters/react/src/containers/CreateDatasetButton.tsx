@@ -1,17 +1,23 @@
-import { Dialog, Form } from "@/components";
-import { useServices, useTasks } from "@/store";
+import { Dialog, Form } from "../components";
+import { useUseCases, useTasks } from "../hooks";
 import { ActionIcon } from "@mantine/core";
-import { CreateDataset } from "@monotonics/core";
 import { IconDatabasePlus, IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 
 export const CreateDatasetButton = (_: {}) => {
-  const services = useServices();
+  const [useCases] = useUseCases();
   const [tasks] = useTasks();
   const [open, setOpen] = useState(false);
   return (
     <>
-      <ActionIcon size="xs" onClick={() => setOpen(true)}>
+      <ActionIcon
+        size="xs"
+        onClick={() => {
+          useCases.getTasks.execute({}).then(() => {
+            setOpen(true);
+          });
+        }}
+      >
         <IconPlus />
       </ActionIcon>
       <Dialog
@@ -25,6 +31,7 @@ export const CreateDatasetButton = (_: {}) => {
             {
               label: "Dataset Name",
               type: "text",
+              name: "name",
               validate: (value) => {
                 if (value === "") {
                   return "Dataset name cannot be empty";
@@ -35,6 +42,7 @@ export const CreateDatasetButton = (_: {}) => {
             {
               label: "Dataset Description",
               type: "text",
+              name: "description",
               validate: (value) => {
                 return null;
               },
@@ -42,6 +50,7 @@ export const CreateDatasetButton = (_: {}) => {
             {
               label: "Task",
               type: "select",
+              name: "taskId",
               options: tasks.map((task) => ({
                 value: task.id,
                 label: task.name,
@@ -55,8 +64,7 @@ export const CreateDatasetButton = (_: {}) => {
             },
           ]}
           onSubmit={(values) => {
-            const usecase = new CreateDataset(services);
-            usecase
+            useCases.createDataset
               .execute({
                 name: values["name"].toString(),
                 description: values["description"]?.toString() ?? "",

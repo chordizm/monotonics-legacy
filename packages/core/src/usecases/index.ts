@@ -32,9 +32,7 @@ export type GetRawDataUseCaseInput = {
   id: Identity;
 };
 export type GetRawDataUseCase = AsyncUseCase<GetRawDataUseCaseInput, Buffer>;
-export type GetTasksUseCaseInput = {
-  mimeType: string;
-};
+export type GetTasksUseCaseInput = any;
 export type GetTasksUseCase = AsyncUseCase<
   GetTasksUseCaseInput | undefined,
   Task[]

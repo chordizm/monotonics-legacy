@@ -1,4 +1,4 @@
-import { View } from "@/containers";
+import { View } from "../../containers";
 import { Provider, createStore } from "jotai";
 import {
   dataAtom,
@@ -6,8 +6,8 @@ import {
   selectedDatasetIdAtom,
   tasksAtom,
   selectedDataIdAtom,
-  UrlResolverAtom
-} from "@/store";
+  UrlResolverAtom,
+} from "../../store";
 import { Task, Data, Dataset, Identity } from "@monotonics/core";
 
 export default {
@@ -53,6 +53,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
 
 const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `dataset-${i}`,
+  taskId: `task-${i}`,
   name: `Dataset ${i + 1}`,
   description: `Dataset ${i + 1} description`,
   mimeType: "image/jpeg",
@@ -71,7 +72,7 @@ defaultStore.set(dataAtom, data);
 defaultStore.set(selectedDataIdAtom, "data-0");
 defaultStore.set(selectedDatasetIdAtom, "dataset-0");
 defaultStore.set(UrlResolverAtom, {
-    getUrl: (id: Identity) => `/sample.jpg`,
+  getUrl: (id: Identity) => `/sample.jpg`,
 });
 export const Default = {
   args: {},

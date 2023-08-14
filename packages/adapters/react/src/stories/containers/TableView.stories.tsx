@@ -1,6 +1,6 @@
-import { TableView } from "@/containers";
+import { TableView } from "../../containers";
 import { Provider, createStore } from "jotai";
-import { dataAtom, selectedDataIdAtom } from "@/store";
+import { dataAtom, selectedDataIdAtom } from "../../store";
 import { Data } from "@monotonics/core";
 
 export default {

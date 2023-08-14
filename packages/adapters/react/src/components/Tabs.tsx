@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { Tabs as MantineTabs, ScrollArea } from "@mantine/core";
-import { convertCamelCaseToWords } from "@/utils";
+import { convertCamelCaseToWords } from "../utils";
 
 export type TabProps = {
   value: string;

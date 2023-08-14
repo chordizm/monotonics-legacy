@@ -1,7 +1,7 @@
 import { action } from "@storybook/addon-actions";
-import { CreateDatasetButton } from "@/containers";
+import { CreateDatasetButton } from "../../containers";
 import { Provider, createStore } from "jotai";
-import { tasksAtom, datasetsAtom, dataAtom } from "@/store";
+import { tasksAtom, datasetsAtom, dataAtom } from "../../store";
 import { Data, Dataset, Task } from "@monotonics/core";
 
 export default {

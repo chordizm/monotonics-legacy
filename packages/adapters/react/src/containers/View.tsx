@@ -1,6 +1,6 @@
 import { ChartView, ImageView, TableView, ThumbnailView } from ".";
-import { DataView, Tab, Tabs } from "@/components";
-import { useData, useMimeType, useSelectedDataId } from "@/store";
+import { DataView, Tab, Tabs } from "../components";
+import { useData, useMimeType, useSelectedDataId } from "../hooks";
 import { IconChartHistogram, IconTable } from "@tabler/icons-react";
 
 export const View = (_: {}) => {

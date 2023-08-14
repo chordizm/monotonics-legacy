@@ -6,10 +6,10 @@ import {
   TableHeaderCell,
   TableBody,
   TableCell,
-} from "@/components";
+} from "../components";
 import { Badge, Box } from "@mantine/core";
-import { useColors, useSelectedData, useSelectedItemIndex } from "@/store";
-import { convertCamelCaseToWords } from "@/utils";
+import { useColors, useSelectedData, useSelectedItemIndex } from "../hooks";
+import { convertCamelCaseToWords } from "../utils";
 
 export const TableView = (_: {}): JSX.Element => {
   const [data] = useSelectedData();

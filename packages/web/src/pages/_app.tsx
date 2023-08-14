@@ -2,7 +2,7 @@ import type { NextPage } from "next";
 import type { AppType, AppProps } from "next/app";
 import { trpc } from "../utils/trpc";
 import React from "react";
-import { MantineProvider } from "@mantine/core";
+import { Provider } from "@monotonics/adapter_react";
 import "split-pane-react/esm/themes/default.css";
 
 export type NextPageWithLayout<
@@ -16,9 +16,9 @@ type AppPropsWithLayout = AppProps & {
 
 const Layout = (({ Component, pageProps }: AppPropsWithLayout) => {
   return (
-    <MantineProvider withGlobalStyles withNormalizeCSS>
+    <Provider>
       <Component {...pageProps} />
-    </MantineProvider>
+    </Provider>
   );
 }) as AppType;
 

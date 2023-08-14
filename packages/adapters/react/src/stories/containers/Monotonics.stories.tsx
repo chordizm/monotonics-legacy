@@ -1,4 +1,4 @@
-import { Monotonics } from "@/containers";
+import { Monotonics } from "../../containers";
 import { Provider, createStore } from "jotai";
 import {
   tasksAtom,
@@ -6,7 +6,7 @@ import {
   selectedDatasetIdAtom,
   dataAtom,
   UrlResolverAtom,
-} from "@/store";
+} from "../../store";
 import { Data, Dataset, Identity, Task } from "@monotonics/core";
 
 export default {

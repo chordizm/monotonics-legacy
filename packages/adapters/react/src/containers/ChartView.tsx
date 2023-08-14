@@ -1,5 +1,5 @@
-import { Chart } from "@/components";
-import { useColors, useSelectedData, useSelectedItemIndex } from "@/store";
+import { Chart } from "../components";
+import { useColors, useSelectedData, useSelectedItemIndex } from "../hooks";
 import { useMemo } from "react";
 
 export const ChartView = () => {

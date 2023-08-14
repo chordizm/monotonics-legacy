@@ -1,6 +1,6 @@
-import { ChartView } from "@/containers";
+import { ChartView } from "../../containers";
 import { Provider, createStore } from "jotai";
-import { dataAtom, selectedDataIdAtom } from "@/store";
+import { dataAtom, selectedDataIdAtom } from "../../store";
 import { Data, Task } from "@monotonics/core";
 
 export default {
