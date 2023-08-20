@@ -4,6 +4,7 @@ import { trpc } from "../utils/trpc";
 import React from "react";
 import { Provider } from "@monotonics/adapter_react";
 import "split-pane-react/esm/themes/default.css";
+import "../../styles/global.css";
 
 export type NextPageWithLayout<
   TProps = Record<string, unknown>,

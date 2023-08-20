@@ -4,36 +4,36 @@ import {
   Dataset,
   Data as DomainData,
   Task,
-  Services,
-  TaskRunner,
-  DataRepository,
-  DatasetRepository,
-  TaskRepository,
   Identity,
   UseCases,
+  AsyncUseCase,
 } from "@monotonics/core";
-import { Provider, atom, useAtom, createStore, useAtomValue } from "jotai";
+import { Provider, atom, createStore } from "jotai";
 import React from "react";
 
 type Data = Omit<DomainData, "raw">;
 
 const store = createStore();
 
-const throwNotImplementedException = () => {
-  throw new Error("Not implemented");
+const throwNotImplementedException = (name: string) => () => {
+  throw new Error(`${name} is not implemented`);
 };
 
 export const useCasesAtom = atom<{
   createDataset: UseCases["createDataset"];
   getTasks: UseCases["getTasks"];
+  addData: AsyncUseCase<
+    { datasetId: Identity; data: string; name: string; params: {}; items: [] },
+    Identity
+  >;
+  getDataUrl: AsyncUseCase<Identity, string>;
 }>({
-  createDataset: { execute: throwNotImplementedException },
-  getTasks: { execute: throwNotImplementedException },
+  createDataset: { execute: throwNotImplementedException("createDataset") },
+  getTasks: { execute: throwNotImplementedException("getTasks") },
+  addData: { execute: throwNotImplementedException("addData") },
+  getDataUrl: { execute: throwNotImplementedException("getDataUrl") },
 });
 
-export const UrlResolverAtom = atom<{ getUrl: (id: Identity) => string }>({
-  getUrl: throwNotImplementedException,
-});
 export const tasksAtom = atom<Task[]>([]);
 store.set(tasksAtom, []);
 export const datasetsAtom = atom<Dataset[]>([]);
@@ -49,16 +49,17 @@ export const mimeTypeAtom = atom<string | undefined>((get) => {
   const task = tasks.find(({ id }) => id === dataset?.taskId);
   return task?.mimeType;
 });
-export const dataAtom = atom<Data[]>([]);
+export const dataAtom = atom<Omit<Data, "raw">[]>([]);
 store.set(dataAtom, []);
 export const selectedDataIdAtom = atom<string | undefined>(undefined);
 store.set(selectedDataIdAtom, undefined);
-export const selectedDataAtom = atom<Data | undefined>((get) => {
+export const selectedDataAtom = atom<Omit<Data, "raw"> | undefined>((get) => {
   return get(dataAtom).find(({ id }) => id === get(selectedDataIdAtom));
 });
 export const StoreProvider = (props: React.PropsWithChildren<{}>) => (
   <Provider store={store}>{props.children}</Provider>
 );
+export const selectedDataUrlAtom = atom<string | undefined>(undefined);
 export const colorsAtom = atom<{ [key: string]: string }>((get) => {
   const data = get(selectedDataAtom);
   return getColors(data as DomainData);

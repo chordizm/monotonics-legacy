@@ -42,7 +42,9 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
     return data;
   }
 
-  async update(entity: Data): Promise<Identity> {
+  async update(
+    entity: { id: Identity } & Partial<Omit<Data, "id">>
+  ): Promise<Identity> {
     const record = await this.prisma.data.update({
       where: { id: entity.id },
       data: {

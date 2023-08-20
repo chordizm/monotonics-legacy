@@ -15,7 +15,8 @@ export type TaskNodePayload = {
 type TaskNodeProps = NodeDef & {};
 
 export default function (RED: NodeAPI) {
-  function TaskTriggerNode(this: Node, props: TaskNodeProps) {
+  console.log("[Adapter Node-RED] Registering TaskNode");
+  function TaskNode(this: Node, props: TaskNodeProps) {
     RED.nodes.createNode(this, props);
     const node = this;
     const trigger = (
@@ -26,18 +27,27 @@ export default function (RED: NodeAPI) {
       done?: (err?: Error | undefined) => void
     ) => {
       const payload = msg.payload as TaskNodePayload;
+      console.log("TaskNode", payload);
       if (!payload)
         return done?.(new Error("Payload is required for task trigger"));
       (
         (RED.settings.functionGlobalContext as any)?.usecases as UseCases
-      )?.getRawData
+      )?.getDataUrlById
         .execute({
           id: payload.id,
         })
-        .then((data) => {
-          send?.({
-            payload: { ...payload, size: data.length, blob: data },
+        .then((dataUrl) => {
+          if (dataUrl.length === 0) {
+            console.log(
+              `[Node-RED TaskNode] No data found for task ${payload.id}`
+            );
+            return done?.(new Error(`No data found for task ${payload.id}`));
+          }
+          console.log(`[Node-RED TaskNode] Data URL: ${dataUrl.length} chars`);
+          node.send?.({
+            payload: { ...payload, dataUrl },
           });
+          console.log("[Node-RED TaskNode] Sent.");
           done?.();
         });
     };
@@ -50,5 +60,5 @@ export default function (RED: NodeAPI) {
       RED.events.removeListener(node.id, trigger);
     });
   }
-  RED.nodes.registerType(TASK_TRIGGER_NODE_NAME, TaskTriggerNode);
+  RED.nodes.registerType(TASK_TRIGGER_NODE_NAME, TaskNode);
 }

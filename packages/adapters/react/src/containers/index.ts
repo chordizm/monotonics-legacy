@@ -1,3 +1,4 @@
+export * from "./AddDataButton";
 export * from "./ChartView";
 export * from "./CreateDatasetButton";
 export * from "./Datasets";

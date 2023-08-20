@@ -1,21 +1,25 @@
 import { NodeAPI, Node, NodeDef } from "node-red";
 import { Data, UseCases } from "@monotonics/core";
 
-export const ADD_DATA_NODE_NAME = "@monotonics/add-data";
-export type AddDataPayload = Omit<Data, "id">;
+export const UPDATE_DATA_NODE_NAME = "@monotonics/update-data";
+export type UpdateDataPayload = {
+  id: Data["id"];
+  items: Data["items"];
+  params: Data["params"];
+};
 
-type AddDataNodeProps = NodeDef & {};
+type UpdateDataNodeProps = NodeDef & {};
 
 export default function (RED: NodeAPI) {
-  console.log("[Adapter Node-RED] Registering AddDataNode");
-  function AddDataNode(this: Node, props: AddDataNodeProps) {
+  function UpdateDataNode(this: Node, props: UpdateDataNodeProps) {
+    console.log("[Adapter Node-RED] Registering UpdateDataNode");
     RED.nodes.createNode(this, props);
     const node = this;
     node.on("input", (msg, send, done) => {
-      const payload = msg.payload as AddDataPayload;
+      const payload = msg.payload as UpdateDataPayload;
       (
         (RED.settings.functionGlobalContext as any)?.usecases as UseCases
-      )?.addData
+      )?.updateData
         .execute(payload)
         .then((id) => {
           node.send({
@@ -27,5 +31,5 @@ export default function (RED: NodeAPI) {
         });
     });
   }
-  RED.nodes.registerType(ADD_DATA_NODE_NAME, AddDataNode);
+  RED.nodes.registerType(UPDATE_DATA_NODE_NAME, UpdateDataNode);
 }

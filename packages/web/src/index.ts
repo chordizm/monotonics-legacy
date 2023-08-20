@@ -14,12 +14,13 @@ import {
   GetDataByDatasetId,
   GetDataset,
   GetDatasets,
-  GetRawData,
   GetTasks,
   Services,
   TaskRepository,
   TaskRunner,
+  RunTask,
   useCases,
+  GetDataUrlById,
 } from "@monotonics/core";
 import {
   NodeRedTaskDatabaseAdapter,
@@ -64,8 +65,9 @@ useCases.getDataByDatasetId = new GetDataByDatasetId(services);
 useCases.updateData = new UpdateData(services);
 useCases.getDatasets = new GetDatasets(services);
 useCases.getDataset = new GetDataset(services);
-useCases.getRawData = new GetRawData(services);
+useCases.getDataUrlById = new GetDataUrlById(services);
 useCases.getTasks = new GetTasks(services);
+useCases.runTask = new RunTask(services);
 
 app.use("/red", RED.httpAdmin);
 app.use("/api", RED.httpNode);

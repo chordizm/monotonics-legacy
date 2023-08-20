@@ -1,3 +1,4 @@
+import { action } from "@storybook/addon-actions";
 import { Monotonics } from "../../containers";
 import { Provider, createStore } from "jotai";
 import {
@@ -5,7 +6,7 @@ import {
   datasetsAtom,
   selectedDatasetIdAtom,
   dataAtom,
-  UrlResolverAtom,
+  useCasesAtom,
 } from "../../store";
 import { Data, Dataset, Identity, Task } from "@monotonics/core";
 
@@ -41,27 +42,49 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
   params: {},
-  items: Array.from({ length: 100 }).map((_, j) => {
-    const params = generateParams();
-    return {
-      ...params,
-      labels: [params.roundness > 0.8 ? "circle" : "square"],
-      points: [
-        { x: Math.random() * 300, y: Math.random() * 200 },
-        { x: Math.random() * 300, y: Math.random() * 200 },
-        { x: Math.random() * 300, y: Math.random() * 200 },
-      ],
-    };
-  }),
+  items:
+    i % 2 === 0
+      ? []
+      : Array.from({ length: 100 }).map((_, j) => {
+          const params = generateParams();
+          return {
+            ...params,
+            labels: [params.roundness > 0.8 ? "circle" : "square"],
+            points: [
+              { x: Math.random() * 300, y: Math.random() * 200 },
+              { x: Math.random() * 300, y: Math.random() * 200 },
+              { x: Math.random() * 300, y: Math.random() * 200 },
+            ],
+          };
+        }),
 }));
 
 const defaultStore = createStore();
+defaultStore.set(useCasesAtom, {
+  createDataset: {
+    execute: () => {
+      action("createDataset");
+      return Promise.resolve("");
+    },
+  },
+  getTasks: {
+    execute: () => {
+      action("getTasks");
+      return Promise.resolve([]);
+    },
+  },
+  addData: {
+    execute: () => {
+      action("addData");
+      return Promise.resolve("");
+    },
+  },
+  getDataUrl: { execute: async (id: Identity) => `/sample.jpg` },
+});
 defaultStore.set(datasetsAtom, datasets);
 defaultStore.set(tasksAtom, tasks);
 defaultStore.set(dataAtom, data);
-defaultStore.set(UrlResolverAtom, {
-  getUrl: (id: Identity) => `/sample.jpg`,
-});
+
 export const Default = {
   args: {},
   decorators: [

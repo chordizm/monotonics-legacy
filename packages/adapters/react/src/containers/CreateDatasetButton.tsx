@@ -1,6 +1,5 @@
-import { Dialog, Form } from "../components";
+import { Dialog, Form, IconButton } from "../components";
 import { useUseCases, useTasks } from "../hooks";
-import { ActionIcon } from "@mantine/core";
 import { IconDatabasePlus, IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 
@@ -10,16 +9,15 @@ export const CreateDatasetButton = (_: {}) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <ActionIcon
-        size="xs"
+      <IconButton
         onClick={() => {
           useCases.getTasks.execute({}).then(() => {
             setOpen(true);
           });
         }}
       >
-        <IconPlus />
-      </ActionIcon>
+        <IconPlus size="1rem" />
+      </IconButton>
       <Dialog
         icon={<IconDatabasePlus />}
         open={open}

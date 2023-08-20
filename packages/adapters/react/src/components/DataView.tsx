@@ -1,5 +1,7 @@
+/** @jsxImportSource @emotion/react */
 import React, { useMemo, useState } from "react";
 import SplitPane, { SashContent, Pane } from "split-pane-react";
+import { css } from "@emotion/react";
 
 export type DataViewProps = React.PropsWithChildren<{}>;
 
@@ -14,7 +16,16 @@ export const DataView = (props: DataViewProps) => {
 
   return (
     <SplitPane
-      sashRender={(_, active) => <SashContent active={active} type="vscode" />}
+      sashRender={(_, active) => (
+        <SashContent
+          css={css`
+            background-color: #eee;
+            height: 2px;
+          `}
+          active={active}
+          type="vscode"
+        ></SashContent>
+      )}
       style={{ flex: 1, width: "100%", height: "100%" }}
       split="horizontal"
       sizes={sizes}

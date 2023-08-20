@@ -1,8 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import { Tabs as MantineTabs, ScrollArea } from "@mantine/core";
-import { convertCamelCaseToWords } from "../utils";
 
 export type TabProps = {
+  label: string;
   value: string;
   icon?: React.ReactNode;
   children: React.ReactNode;
@@ -21,11 +21,12 @@ export type TabsProps = {
   value?: string;
   children: React.ReactNode;
   defaultValue?: string;
+  actions?: React.ReactNode;
   onChange?: (value: string) => void;
 };
 
 export const Tabs = (props: TabsProps) => {
-  const { value, children, defaultValue, onChange } = props;
+  const { value, children, defaultValue, actions, onChange } = props;
   const viewportRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (!viewportRef.current) return;
@@ -57,43 +58,72 @@ export const Tabs = (props: TabsProps) => {
       }}
       defaultValue={defaultValue}
     >
-      <ScrollArea
-        type="never"
-        onWheel={(e) => {
-          if (!e.deltaY || !viewportRef.current) return;
-          viewportRef.current.scrollLeft += e.deltaY + e.deltaX;
+      <div
+        style={{
+          display: "flex",
+          width: "100%",
+          borderBottom: "solid 1px lightgray",
         }}
-        viewportRef={viewportRef}
       >
-        <MantineTabs.List sx={{ flexWrap: "nowrap" }}>
-          {
-            React.Children.map(children, (child) => {
-              if (React.isValidElement(child)) {
-                return { icon: child.props.icon, value: child.props.value };
-              }
-              return undefined;
-            })
-              ?.filter((props) => props !== undefined)
-              .map(({ icon, value }) => (
-                <MantineTabs.Tab
-                  key={value}
-                  icon={icon}
-                  value={value}
-                  sx={{
-                    padding: 8,
-                    width: 150,
-                    fontSize: "0.75rem",
-                    borderRadius: 0,
-                    borderRight: "solid 1px lightgray !important",
-                  }}
-                >
-                  {convertCamelCaseToWords(value)}
-                </MantineTabs.Tab>
-              )) as React.ReactNode
-          }
-        </MantineTabs.List>
-      </ScrollArea>
-
+        <ScrollArea
+          type="never"
+          onWheel={(e) => {
+            if (!e.deltaY || !viewportRef.current) return;
+            viewportRef.current.scrollLeft += e.deltaY + e.deltaX;
+          }}
+          viewportRef={viewportRef}
+        >
+          <MantineTabs.List
+            sx={{
+              flexWrap: "nowrap",
+              borderBottom: "none !important",
+            }}
+          >
+            {
+              React.Children.map(children, (child) => {
+                if (React.isValidElement(child)) {
+                  return {
+                    icon: child.props.icon,
+                    label: child.props.label,
+                    value: child.props.value,
+                  };
+                }
+                return undefined;
+              })
+                ?.filter((props) => props !== undefined)
+                .map(({ icon, label, value }, i) => (
+                  <MantineTabs.Tab
+                    key={value}
+                    icon={icon}
+                    value={value}
+                    sx={{
+                      padding: 8,
+                      //   width: 150,
+                      fontSize: "0.75rem",
+                      borderRadius: 0,
+                      borderRight: "solid 1px lightgray !important",
+                      borderBottom: "none !important",
+                      //   textOverflow: "ellipsis",
+                    }}
+                  >
+                    {label}
+                  </MantineTabs.Tab>
+                )) as React.ReactNode
+            }
+          </MantineTabs.List>
+        </ScrollArea>
+        {actions && (
+          <div
+            style={{
+              borderLeft: "1px solid #ccc",
+              display: "flex",
+              alignItems: "center",
+            }}
+          >
+            {actions}
+          </div>
+        )}
+      </div>
       {children}
     </MantineTabs>
   );

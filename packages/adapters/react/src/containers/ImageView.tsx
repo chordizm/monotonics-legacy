@@ -2,7 +2,7 @@ import {
   useSelectedItemIndex,
   useColors,
   useSelectedData,
-  useUrlResolver,
+  useSelectedDataUrl,
 } from "../hooks";
 import { getViewBox } from "../utils";
 import { Image } from "../components";
@@ -12,10 +12,10 @@ export const ImageView = (_: {}) => {
   const [data] = useSelectedData();
   const [selectedIndex, setSelectedIndex] = useSelectedItemIndex();
   const [colors] = useColors();
-  const resolver = useUrlResolver();
-  return data ? (
+  const [dataUrl] = useSelectedDataUrl();
+  return data && dataUrl ? (
     <Image
-      src={resolver.getUrl(data.id)}
+      src={dataUrl}
       colors={colors}
       data={data}
       selectedIndex={selectedIndex}

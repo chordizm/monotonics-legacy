@@ -9,7 +9,11 @@ export class DataRepository {
   async get(query?: Query<Data>) {
     return this.adapters.gateways.data.get(query);
   }
-  async update(data: Data) {
+  async update(data: {
+    id: Data["id"];
+    items: Data["items"];
+    params: Data["params"];
+  }) {
     return this.adapters.gateways.data.update(data);
   }
   async delete(id: Identity) {

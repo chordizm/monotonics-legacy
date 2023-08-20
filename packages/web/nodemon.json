@@ -2,5 +2,11 @@
   "watch": ["src"],
   "ext": "ts",
   "exec": "ts-node ./src/index.ts",
-  "ignore": ["src/pages", "src/server", "src/utils", "node_modules"]
+  "ignore": [
+    "src/pages",
+    "src/server",
+    "src/utils",
+    "src/hooks",
+    "node_modules"
+  ]
 }

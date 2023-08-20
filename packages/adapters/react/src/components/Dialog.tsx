@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal, Flex, Center, Divider } from "@mantine/core";
+import { Modal, Flex, Center, Divider, ScrollArea } from "@mantine/core";
 
 export type DialogProps = React.PropsWithChildren<{
   open: boolean;
@@ -22,11 +22,7 @@ export const Dialog = (props: DialogProps) => {
       }
       centered
       size="md"
-      styles={(theme) => ({
-        ["content"]: {
-          padding: theme.spacing.xs,
-        },
-      })}
+      scrollAreaComponent={ScrollArea.Autosize}
     >
       <Divider mb="sm" />
       {children}
