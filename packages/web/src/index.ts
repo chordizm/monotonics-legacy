@@ -20,7 +20,7 @@ import {
   TaskRunner,
   RunTask,
   useCases,
-  GetDataUrlById,
+  GetDataById,
 } from "@monotonics/core";
 import {
   NodeRedTaskDatabaseAdapter,
@@ -65,7 +65,7 @@ useCases.getDataByDatasetId = new GetDataByDatasetId(services);
 useCases.updateData = new UpdateData(services);
 useCases.getDatasets = new GetDatasets(services);
 useCases.getDataset = new GetDataset(services);
-useCases.getDataUrlById = new GetDataUrlById(services);
+useCases.getDataById = new GetDataById(services);
 useCases.getTasks = new GetTasks(services);
 useCases.runTask = new RunTask(services);
 

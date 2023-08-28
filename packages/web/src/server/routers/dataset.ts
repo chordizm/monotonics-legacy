@@ -13,9 +13,16 @@ export const datasetRouter = router({
     .mutation(async ({ input, ctx }) => {
       return ctx.usecases.createDataset.execute(input);
     }),
-  list: publicProcedure.query(async ({ input, ctx }) => {
-    return ctx.usecases.getDatasets.execute(undefined);
-  }),
+  list: publicProcedure
+    .input(
+      z.object({
+        limit: z.number().min(1).max(100).nullish(),
+        cursor: z.number().nullish(),
+      })
+    )
+    .query(async ({ ctx }) => {
+      return ctx.usecases.getDatasets.execute(undefined);
+    }),
   addData: publicProcedure
     .input(
       z.object({

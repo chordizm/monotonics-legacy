@@ -14,11 +14,7 @@ export type MonotonicsProps = {
     description: string;
     taskId: Identity;
   }) => Promise<void>;
-  onDataUpload?: (input: {
-    datasetId: Identity;
-    name: string;
-    data: string;
-  }) => Promise<void>;
+  onUpload?: (input: { name: string; data: string }) => Promise<void>;
 };
 
 export const Monotonics = ({
@@ -28,6 +24,7 @@ export const Monotonics = ({
   resolveData,
   onSelectedDatasetChange,
   onDatasetCreate,
+  onUpload,
 }: MonotonicsProps): JSX.Element => {
   return (
     <AppShell
@@ -45,9 +42,7 @@ export const Monotonics = ({
       <DataView
         indexes={indexes}
         resolveData={resolveData}
-        onUpload={() => {
-          return Promise.resolve();
-        }}
+        onUpload={onUpload}
       />
     </AppShell>
   );

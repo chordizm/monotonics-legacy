@@ -4,9 +4,9 @@ export { default as CreateDataset } from "./CreateDatasetUseCase";
 export { default as GetDataByDatasetId } from "./GetDataByDatasetIdUseCase";
 export { default as GetDataset } from "./GetDatasetUseCase";
 export { default as GetDatasets } from "./GetDatasetsUseCase";
-export { default as GetRawData } from "./GetDataUrlByIdUseCase";
+export { default as GetRawData } from "./GetDataByIdUseCase";
 export { default as GetTasks } from "./GetTasksUseCase";
-export { default as GetDataUrlById } from "./GetDataUrlByIdUseCase";
+export { default as GetDataById } from "./GetDataByIdUseCase";
 export { default as UpdateData } from "./UpdateDataUseCase";
 export { default as RunTask } from "./RunTaskUseCase";
 
@@ -36,13 +36,10 @@ export type GetDatasetUseCaseInput = {
 };
 export type GetDatasetUseCase = AsyncUseCase<GetDatasetUseCaseInput, Dataset>;
 
-export type GetDataUrlByIdUseCaseInput = {
+export type GetDataByIdUseCaseInput = {
   id: Identity;
 };
-export type GetDataUrlByIdUseCase = AsyncUseCase<
-  GetDataUrlByIdUseCaseInput,
-  string
->;
+export type GetDataByIdUseCase = AsyncUseCase<GetDataByIdUseCaseInput, Data>;
 export type GetTasksUseCaseInput = any;
 export type GetTasksUseCase = AsyncUseCase<
   GetTasksUseCaseInput | undefined,
@@ -60,7 +57,7 @@ export type UseCases = {
   getDataByDatasetId: GetDataByDatasetIdUseCase;
   getDatasets: GetDatasetsUseCase;
   getDataset: GetDatasetUseCase;
-  getDataUrlById: GetDataUrlByIdUseCase;
+  getDataById: GetDataByIdUseCase;
   getTasks: GetTasksUseCase;
   runTask: RunTaskUseCase;
   updateData: UpdateDataUseCase;
@@ -78,7 +75,7 @@ export const useCases: UseCases = {
   getDataByDatasetId: defaultUseCase,
   getDatasets: defaultUseCase,
   getDataset: defaultUseCase,
-  getDataUrlById: defaultUseCase,
+  getDataById: defaultUseCase,
   getTasks: defaultUseCase,
   runTask: defaultUseCase,
   updateData: defaultUseCase,
