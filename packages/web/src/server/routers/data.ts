@@ -40,13 +40,12 @@ export const dataRouter = router({
       z.object({
         datasetId: z.string(),
         name: z.string(),
+        type: z.string(),
         data: z.string(),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      const { datasetId, name, data } = input;
-      const [mimeType, b64] = data.split(",");
-      const raw = Buffer.from(b64, "base64");
+      const { datasetId, type: mimeType, name, data: raw } = input;
       const id = await ctx.usecases.addData.execute({
         datasetId,
         date: new Date(),

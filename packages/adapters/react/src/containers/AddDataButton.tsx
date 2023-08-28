@@ -3,7 +3,11 @@ import { IconDatabasePlus, IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 export type AddDataButtonProps = {
-  onUpload?: (input: { name: string; data: string }) => Promise<void>;
+  onUpload?: (input: {
+    name: string;
+    type: string;
+    data: string;
+  }) => Promise<void>;
 };
 
 export const AddDataButton = ({ onUpload }: AddDataButtonProps) => {
@@ -53,7 +57,8 @@ export const AddDataButton = ({ onUpload }: AddDataButtonProps) => {
                   );
                   onUpload?.({
                     name: file.name,
-                    data: `${file.type};base64,${data}`,
+                    type: file.type,
+                    data,
                   });
                 });
               });

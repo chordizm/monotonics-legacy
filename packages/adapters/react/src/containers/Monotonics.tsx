@@ -14,7 +14,11 @@ export type MonotonicsProps = {
     description: string;
     taskId: Identity;
   }) => Promise<void>;
-  onUpload?: (input: { name: string; data: string }) => Promise<void>;
+  onUpload?: (input: {
+    name: string;
+    type: string;
+    data: string;
+  }) => Promise<void>;
 };
 
 export const Monotonics = ({

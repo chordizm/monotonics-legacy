@@ -36,6 +36,7 @@ export default function Home() {
             upload.mutate({
               datasetId,
               name: input.name,
+              type: input.type,
               data: input.data,
             });
         }}

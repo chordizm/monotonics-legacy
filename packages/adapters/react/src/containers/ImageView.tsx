@@ -11,14 +11,13 @@ export type ImageViewProps = {
 
 export const ImageView = ({
   data,
-  dataUrl,
   selectedIndex,
   onChange,
 }: ImageViewProps) => {
   const colors = getColors(data);
-  return data && dataUrl ? (
+  return data ? (
     <Image
-      src={dataUrl}
+      src={`data:${data.mimeType};base64,${data.raw}`}
       colors={colors}
       data={data}
       selectedIndex={selectedIndex}

@@ -44,9 +44,7 @@ export default function (RED: NodeAPI) {
             return done?.(new Error(`No data found for task ${payload.id}`));
           }
           console.log(`[Node-RED TaskNode] Data URL: ${data.raw.length} chars`);
-          const dataUrl = `data:${data.mimeType};base64,${data.raw.toString(
-            "base64"
-          )}`;
+          const dataUrl = `data:${data.mimeType};base64,${data.raw}`;
           node.send?.({
             payload: { ...payload, dataUrl },
           });

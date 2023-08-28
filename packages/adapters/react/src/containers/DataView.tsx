@@ -64,7 +64,11 @@ const Content = ({ hidden, data }: ContentProps) => {
 export type DataViewProps = {
   indexes: Index[];
   resolveData: (id: Identity) => Promise<Data>;
-  onUpload?: (input: { name: string; data: string }) => Promise<void>;
+  onUpload?: (input: {
+    name: string;
+    type: string;
+    data: string;
+  }) => Promise<void>;
 };
 
 export const DataView = ({ indexes, resolveData, onUpload }: DataViewProps) => {
