@@ -3,9 +3,9 @@ import React, { useMemo, useState } from "react";
 import SplitPane, { SashContent, Pane } from "split-pane-react";
 import { css } from "@emotion/react";
 
-export type DataViewProps = React.PropsWithChildren<{}>;
+export type SplitViewProps = React.PropsWithChildren<{}>;
 
-export const DataView = (props: DataViewProps) => {
+export const SplitView = (props: SplitViewProps) => {
   const [sizes, setSizes] = useState<(number | string)[]>(["50%", "50%"]);
   const { children } = props;
   const { main, sub } = useMemo(() => {

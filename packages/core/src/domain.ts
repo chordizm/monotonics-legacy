@@ -13,15 +13,18 @@ export type Item = Record<string, unknown> & {
   labels: string[];
 };
 
-export type Data = Entity<{
+export type Index = Entity<{
   date: Date;
   datasetId: Identity;
   name: string;
   mimeType: string;
+}>;
+
+export type Data = Index & {
   raw: Buffer;
   items: Item[];
   params: Record<string, unknown>;
-}>;
+};
 
 export type Task = Entity<{ name: string; mimeType: string }>;
 export type User = Entity<{ name: string; role: Role }>;

@@ -1,16 +1,14 @@
 import { Button, Dialog, FileInput, IconButton } from "../components";
 import { IconDatabasePlus, IconPlus } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { useUseCases } from "../hooks";
 
 export type AddDataButtonProps = {
-  datasetId: string;
+  onUpload?: (input: { name: string; data: string }) => Promise<void>;
 };
 
-export const AddDataButton = ({ datasetId }: AddDataButtonProps) => {
+export const AddDataButton = ({ onUpload }: AddDataButtonProps) => {
   const [open, setOpen] = useState(false);
   const [files, setFiles] = useState<File[]>([]);
-  const [useCases] = useUseCases();
   useEffect(() => {
     if (!open) {
       setFiles([]);
@@ -53,12 +51,9 @@ export const AddDataButton = ({ datasetId }: AddDataButtonProps) => {
                       ""
                     )
                   );
-                  useCases.addData.execute({
-                    datasetId,
+                  onUpload?.({
                     name: file.name,
                     data: `${file.type};base64,${data}`,
-                    params: {},
-                    items: [],
                   });
                 });
               });

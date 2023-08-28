@@ -1,11 +1,16 @@
+import { Data } from "@monotonics/core";
 import { Chart } from "../components";
-import { useColors, useSelectedData, useSelectedItemIndex } from "../hooks";
+import { getColors } from "../utils";
 import { useMemo } from "react";
 
-export const ChartView = () => {
-  const [data] = useSelectedData();
-  const [colors] = useColors();
-  const [_, setSelectedIndex] = useSelectedItemIndex();
+export type ChartViewProps = {
+  data: Data;
+
+  onClick?: (index?: number) => void;
+};
+
+export const ChartView = ({ data, onClick }: ChartViewProps) => {
+  const colors = data ? getColors(data) : {};
   const ignore = useMemo(() => {
     return data?.mimeType?.startsWith("image") ? ["points"] : [];
   }, [data]);
@@ -14,7 +19,7 @@ export const ChartView = () => {
       data={data}
       colors={colors}
       ignore={ignore}
-      onClick={(index) => setSelectedIndex(index)}
+      onClick={(index) => onClick?.(index)}
     />
   ) : (
     <>Data not found</>

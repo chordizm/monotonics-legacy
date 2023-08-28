@@ -1,13 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { Monotonics } from "../../containers";
-import { Provider, createStore } from "jotai";
-import {
-  tasksAtom,
-  datasetsAtom,
-  selectedDatasetIdAtom,
-  dataAtom,
-  useCasesAtom,
-} from "../../store";
+import { Monotonics, Provider } from "../../containers";
 import { Data, Dataset, Identity, Task } from "@monotonics/core";
 
 export default {
@@ -59,52 +51,26 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
         }),
 }));
 
-const defaultStore = createStore();
-defaultStore.set(useCasesAtom, {
-  createDataset: {
-    execute: () => {
-      action("createDataset");
-      return Promise.resolve("");
-    },
-  },
-  getTasks: {
-    execute: () => {
-      action("getTasks");
-      return Promise.resolve([]);
-    },
-  },
-  addData: {
-    execute: () => {
-      action("addData");
-      return Promise.resolve("");
-    },
-  },
-  getDataUrl: { execute: async (id: Identity) => `/sample.jpg` },
-});
-defaultStore.set(datasetsAtom, datasets);
-defaultStore.set(tasksAtom, tasks);
-defaultStore.set(dataAtom, data);
-
 export const Default = {
-  args: {},
+  args: {
+    data,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={defaultStore}>
+      <Provider>
         <Story />
       </Provider>
     ),
   ],
 };
 
-const datasetSelectedStore = createStore();
-datasetSelectedStore.set(datasetsAtom, datasets);
-datasetSelectedStore.set(tasksAtom, tasks);
-datasetSelectedStore.set(selectedDatasetIdAtom, "dataset-0");
 export const DatasetSelected = {
-  args: {},
+  args: {
+    data,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={datasetSelectedStore}>
+      <Provider>
         <Story />
       </Provider>
     ),

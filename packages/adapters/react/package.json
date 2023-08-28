@@ -32,7 +32,6 @@
     "@storybook/react": "^7.0.10",
     "@storybook/react-webpack5": "^7.0.10",
     "@storybook/testing-library": "^0.0.14-next.2",
-    "jotai": "^2.1.0",
     "prop-types": "^15.8.1",
     "recharts": "^2.6.2",
     "split-pane-react": "^0.1.3",

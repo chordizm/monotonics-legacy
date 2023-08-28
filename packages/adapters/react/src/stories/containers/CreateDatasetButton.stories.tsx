@@ -1,7 +1,5 @@
 import { action } from "@storybook/addon-actions";
-import { CreateDatasetButton } from "../../containers";
-import { Provider, createStore } from "jotai";
-import { tasksAtom, datasetsAtom, dataAtom, useCasesAtom } from "../../store";
+import { CreateDatasetButton, Provider } from "../../containers";
 import { Data, Dataset, Task } from "@monotonics/core";
 
 export default {
@@ -50,29 +48,13 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
   }),
 }));
 
-const defaultStore = createStore();
-defaultStore.set(useCasesAtom, {
-  createDataset: {
-    execute: () => {
-      action("createDataset");
-      return Promise.resolve("");
-    },
-  },
-  getTasks: {
-    execute: () => {
-      action("getTasks");
-      return Promise.resolve([]);
-    },
-  },
-});
-defaultStore.set(datasetsAtom, datasets);
-defaultStore.set(tasksAtom, tasks);
-defaultStore.set(dataAtom, data);
 export const Default = {
-  args: {},
+  args: {
+    tasks,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={defaultStore}>
+      <Provider>
         <Story />
       </Provider>
     ),

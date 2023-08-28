@@ -1,18 +1,21 @@
-import {
-  useSelectedItemIndex,
-  useColors,
-  useSelectedData,
-  useSelectedDataUrl,
-} from "../hooks";
-import { getViewBox } from "../utils";
+import { getColors, getViewBox } from "../utils";
 import { Image } from "../components";
-import { Point } from "@monotonics/core";
+import { Data, Point } from "@monotonics/core";
 
-export const ImageView = (_: {}) => {
-  const [data] = useSelectedData();
-  const [selectedIndex, setSelectedIndex] = useSelectedItemIndex();
-  const [colors] = useColors();
-  const [dataUrl] = useSelectedDataUrl();
+export type ImageViewProps = {
+  dataUrl: string;
+  data: Data;
+  selectedIndex?: number;
+  onChange?: (selectedIndex?: number) => void;
+};
+
+export const ImageView = ({
+  data,
+  dataUrl,
+  selectedIndex,
+  onChange,
+}: ImageViewProps) => {
+  const colors = getColors(data);
   return data && dataUrl ? (
     <Image
       src={dataUrl}
@@ -24,7 +27,7 @@ export const ImageView = (_: {}) => {
           ? getViewBox(data.items[selectedIndex].points as Point[])
           : undefined
       }
-      onClick={(index) => setSelectedIndex(index)}
+      onClick={(index) => onChange?.(index)}
     />
   ) : (
     <></>

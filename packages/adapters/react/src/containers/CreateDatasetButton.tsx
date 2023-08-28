@@ -1,21 +1,25 @@
+import { Identity, Task } from "@monotonics/core";
 import { Dialog, Form, IconButton } from "../components";
-import { useUseCases, useTasks } from "../hooks";
 import { IconDatabasePlus, IconPlus } from "@tabler/icons-react";
 import { useState } from "react";
 
-export const CreateDatasetButton = (_: {}) => {
-  const [useCases] = useUseCases();
-  const [tasks] = useTasks();
+export type CreateDatasetButtonProps = {
+  tasks: Task[];
+  onCreate?: (item: {
+    name: string;
+    description: string;
+    taskId: Identity;
+  }) => Promise<void>;
+};
+
+export const CreateDatasetButton = ({
+  tasks,
+  onCreate,
+}: CreateDatasetButtonProps) => {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <IconButton
-        onClick={() => {
-          useCases.getTasks.execute({}).then(() => {
-            setOpen(true);
-          });
-        }}
-      >
+      <IconButton onClick={() => setOpen(true)}>
         <IconPlus size="1rem" />
       </IconButton>
       <Dialog
@@ -62,15 +66,13 @@ export const CreateDatasetButton = (_: {}) => {
             },
           ]}
           onSubmit={(values) => {
-            useCases.createDataset
-              .execute({
-                name: values["name"].toString(),
-                description: values["description"]?.toString() ?? "",
-                taskId: values["taskId"]?.toString() ?? "",
-              })
-              .then(() => {
-                setOpen(false);
-              });
+            onCreate?.({
+              name: values["name"].toString(),
+              description: values["description"]?.toString() ?? "",
+              taskId: values["taskId"]?.toString() ?? "",
+            }).then(() => {
+              setOpen(false);
+            });
           }}
         >
           Create dataset

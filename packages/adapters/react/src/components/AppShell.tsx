@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import {
   AppShell as MantineAppShell,
   Header,
@@ -7,7 +7,7 @@ import {
   Center,
   Box,
 } from "@mantine/core";
-import { HumburgerButton, Logo, Navbar, useSelectedDatasetId } from "..";
+import { HumburgerButton, Logo, Navbar } from "..";
 
 export type AppShellProps = React.PropsWithChildren<{
   navbar: {
@@ -20,13 +20,7 @@ export type AppShellProps = React.PropsWithChildren<{
 
 export const AppShell = (props: AppShellProps) => {
   const { navbar, children } = props;
-  const [opened, setOpened] = React.useState(false);
-  const [datasetId] = useSelectedDatasetId();
-  useEffect(() => {
-    if (datasetId) {
-      setOpened(false);
-    }
-  }, [datasetId]);
+  const [opened, setOpened] = useState(false);
   return (
     <MantineAppShell
       header={

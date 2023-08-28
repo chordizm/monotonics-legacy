@@ -1,6 +1,4 @@
-import { TableView } from "../../containers";
-import { Provider, createStore } from "jotai";
-import { dataAtom, selectedDataIdAtom } from "../../store";
+import { TableView, Provider } from "../../containers";
 import { Data } from "@monotonics/core";
 
 export default {
@@ -36,15 +34,13 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
   }),
 }));
 
-const defaultStore = createStore();
-defaultStore.set(dataAtom, data);
-defaultStore.set(selectedDataIdAtom, "data-0");
-
 export const Default = {
-  args: {},
+  args: {
+    data,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={defaultStore}>
+      <Provider>
         <Story />
       </Provider>
     ),
