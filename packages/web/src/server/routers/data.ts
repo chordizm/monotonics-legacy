@@ -3,7 +3,7 @@ import { router, publicProcedure } from "../trpc";
 import { z } from "zod";
 
 export const dataRouter = router({
-  filterByDatasetId: publicProcedure
+  list: publicProcedure
     .input(
       z.object({
         datasetId: z.string().nullish(),

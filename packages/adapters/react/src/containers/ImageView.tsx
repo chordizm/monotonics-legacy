@@ -3,7 +3,6 @@ import { Image } from "../components";
 import { Data, Point } from "@monotonics/core";
 
 export type ImageViewProps = {
-  dataUrl: string;
   data: Data;
   selectedIndex?: number;
   onChange?: (selectedIndex?: number) => void;

@@ -4,22 +4,6 @@ import { SplitView, Tab, Tabs } from "../components";
 import { IconChartHistogram, IconTable } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
-const SelectDataset = () => {
-  return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      Select dataset
-    </div>
-  );
-};
-
 const Processing = () => {
   return (
     <div
@@ -37,15 +21,17 @@ const Processing = () => {
 };
 
 type ContentProps = {
+  selectedIndex?: number;
   hidden?: boolean;
   data?: Data;
+  onChange?: (selectedIndex?: number) => void;
 };
 
-const Content = ({ hidden, data }: ContentProps) => {
+const Content = ({ selectedIndex, hidden, data, onChange }: ContentProps) => {
   return hidden ? (
     <></>
   ) : data ? (
-    <ImageView dataUrl="" data={data} />
+    <ImageView data={data} selectedIndex={selectedIndex} onChange={onChange} />
   ) : (
     <div
       style={{
@@ -62,7 +48,8 @@ const Content = ({ hidden, data }: ContentProps) => {
 };
 
 export type DataViewProps = {
-  indexes: Index[];
+  datasetId?: Identity;
+  resolveIndexes: (id: Identity) => Promise<Index[]>;
   resolveData: (id: Identity) => Promise<Data>;
   onUpload?: (input: {
     name: string;
@@ -71,7 +58,14 @@ export type DataViewProps = {
   }) => Promise<void>;
 };
 
-export const DataView = ({ indexes, resolveData, onUpload }: DataViewProps) => {
+export const DataView = ({
+  datasetId,
+  resolveIndexes,
+  resolveData,
+  onUpload,
+}: DataViewProps) => {
+  const [selectedItemIndex, setSelectedItemIndex] = useState<number>();
+  const [indexes, setIndexes] = useState<Index[]>([]);
   const [data, setData] = useState<Data>();
   const [selectedId, setSelectedId] = useState<Identity>();
   useEffect(() => {
@@ -87,7 +81,24 @@ export const DataView = ({ indexes, resolveData, onUpload }: DataViewProps) => {
       mounted = false;
     };
   }, [selectedId, resolveData]);
-
+  useEffect(() => {
+    let mounted = true;
+    if (datasetId) {
+      resolveIndexes(datasetId).then((indexes) => {
+        if (mounted) {
+          setIndexes(indexes);
+          setSelectedId(indexes[0]?.id);
+        }
+      });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [datasetId, resolveIndexes]);
+  useEffect(() => {
+    setSelectedItemIndex(undefined);
+    setData(undefined);
+  }, [datasetId, selectedId]);
   return (
     <SplitView>
       <Tabs
@@ -100,14 +111,26 @@ export const DataView = ({ indexes, resolveData, onUpload }: DataViewProps) => {
       >
         {indexes.map((x) => (
           <Tab key={x.id} label={x.name} value={x.id}>
-            <Content hidden={x.id !== selectedId} />
+            <Content
+              hidden={x.id !== selectedId}
+              data={data}
+              selectedIndex={selectedItemIndex}
+              onChange={(index) => setSelectedItemIndex(index)}
+            />
           </Tab>
         ))}
       </Tabs>
       {data ? (
         <Tabs defaultValue="table">
           <Tab icon={<IconTable size="0.8rem" />} label="Table" value="table">
-            {data.items.length > 0 ? <TableView data={data} /> : <Processing />}
+            {data.items.length > 0 ? (
+              <TableView
+                data={data}
+                onClick={(index) => setSelectedItemIndex(index)}
+              />
+            ) : (
+              <Processing />
+            )}
           </Tab>
           <Tab
             icon={<IconChartHistogram size="0.8rem" />}

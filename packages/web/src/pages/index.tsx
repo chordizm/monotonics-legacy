@@ -1,16 +1,10 @@
 import { trpc } from "../utils/trpc";
 import Head from "next/head";
 import { Monotonics } from "@monotonics/adapter_react";
-import { useState } from "react";
-import { Identity } from "@monotonics/core";
 
 export default function Home() {
-  const [datasetId, setDatasetId] = useState<Identity>();
   const { data: datasets } = trpc.dataset.list.useInfiniteQuery({});
   const { data: tasks } = trpc.task.list.useInfiniteQuery({});
-  const { data: indexes } = trpc.data.filterByDatasetId.useInfiniteQuery({
-    datasetId,
-  });
   const createDataset = trpc.dataset.create.useMutation();
   const upload = trpc.data.add.useMutation();
   const ctx = trpc.useContext();
@@ -25,19 +19,25 @@ export default function Home() {
       <Monotonics
         tasks={tasks?.pages.flat() ?? []}
         datasets={datasets?.pages.flat() ?? []}
-        indexes={indexes?.pages.flat() ?? []}
         resolveData={(id) => ctx.client.data.get.query({ id })}
-        onSelectedDatasetChange={(id) => setDatasetId(id)}
+        resolveIndexes={(datasetId) =>
+          ctx.client.data.list.query({ datasetId })
+        }
         onDatasetCreate={async (input) => {
-          createDataset.mutate(input);
+          createDataset.mutateAsync(input).then(() => {
+            ctx.dataset.invalidate();
+          });
         }}
         onUpload={async (input) => {
-          datasetId &&
-            upload.mutate({
-              datasetId,
+          upload
+            .mutateAsync({
+              datasetId: input.datasetId,
               name: input.name,
               type: input.type,
               data: input.data,
+            })
+            .then(() => {
+              ctx.data.invalidate();
             });
         }}
       />
