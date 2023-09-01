@@ -4,19 +4,21 @@ import { Data, Point } from "@monotonics/core";
 
 export type ImageViewProps = {
   data: Data;
+  path: string;
   selectedIndex?: number;
   onChange?: (selectedIndex?: number) => void;
 };
 
 export const ImageView = ({
   data,
+  path,
   selectedIndex,
   onChange,
 }: ImageViewProps) => {
   const colors = getColors(data);
   return data ? (
     <Image
-      src={`data:${data.mimeType};base64,${data.raw}`}
+      src={path}
       colors={colors}
       data={data}
       selectedIndex={selectedIndex}

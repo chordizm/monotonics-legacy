@@ -21,17 +21,29 @@ const Processing = () => {
 };
 
 type ContentProps = {
+  path: string;
   selectedIndex?: number;
   hidden?: boolean;
   data?: Data;
   onChange?: (selectedIndex?: number) => void;
 };
 
-const Content = ({ selectedIndex, hidden, data, onChange }: ContentProps) => {
+const Content = ({
+  selectedIndex,
+  hidden,
+  path,
+  data,
+  onChange,
+}: ContentProps) => {
   return hidden ? (
     <></>
   ) : data ? (
-    <ImageView data={data} selectedIndex={selectedIndex} onChange={onChange} />
+    <ImageView
+      path={path}
+      data={data}
+      selectedIndex={selectedIndex}
+      onChange={onChange}
+    />
   ) : (
     <div
       style={{
@@ -51,15 +63,13 @@ export type DataViewProps = {
   datasetId?: Identity;
   resolveIndexes: (id: Identity) => Promise<Index[]>;
   resolveData: (id: Identity) => Promise<Data>;
-  onUpload?: (input: {
-    name: string;
-    type: string;
-    data: string;
-  }) => Promise<void>;
+  resolveDataPath: (id: Identity) => string;
+  onUpload?: (files: File[]) => Promise<void>;
 };
 
 export const DataView = ({
   datasetId,
+  resolveDataPath,
   resolveIndexes,
   resolveData,
   onUpload,
@@ -102,7 +112,19 @@ export const DataView = ({
   return (
     <SplitView>
       <Tabs
-        actions={<AddDataButton onUpload={onUpload} />}
+        actions={
+          <AddDataButton
+            onUpload={async (files) => {
+              onUpload?.(files).then(() => {
+                datasetId &&
+                  resolveIndexes(datasetId).then((indexes) => {
+                    console.log("Indexes: ", indexes);
+                    setIndexes(indexes);
+                  });
+              });
+            }}
+          />
+        }
         value={selectedId}
         onChange={(id) => {
           console.log("Data selected: ", id);
@@ -112,6 +134,7 @@ export const DataView = ({
         {indexes.map((x) => (
           <Tab key={x.id} label={x.name} value={x.id}>
             <Content
+              path={resolveDataPath(x.id)}
               hidden={x.id !== selectedId}
               data={data}
               selectedIndex={selectedItemIndex}

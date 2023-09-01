@@ -31,24 +31,16 @@ export default function (RED: NodeAPI) {
       if (!payload)
         return done?.(new Error("Payload is required for task trigger"));
       (
-        (RED.settings.functionGlobalContext as any)?.usecases as UseCases
-      )?.getDataById
+        (RED.settings.functionGlobalContext as any)?.useCases as UseCases
+      )?.getBlobStreamById
         .execute({
           id: payload.id,
         })
-        .then((data) => {
-          if (data.raw.length === 0) {
-            console.log(
-              `[Node-RED TaskNode] No data found for task ${payload.id}`
-            );
-            return done?.(new Error(`No data found for task ${payload.id}`));
-          }
-          console.log(`[Node-RED TaskNode] Data URL: ${data.raw.length} chars`);
-          const dataUrl = `data:${data.mimeType};base64,${data.raw}`;
+        .then(({ mimeType, stream }) => {
           node.send?.({
-            payload: { ...payload, dataUrl },
+            payload: { ...payload, stream, mimeType },
           });
-          console.log("[Node-RED TaskNode] Sent.");
+          console.log("[Node-RED TaskNode] Done.");
           done?.();
         });
     };

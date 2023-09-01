@@ -22,7 +22,6 @@ model Data {
     datasetId   String
     name        String
     mimeType    String
-    raw         Bytes
     items       String
     params      String
 }

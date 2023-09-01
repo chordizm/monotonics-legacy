@@ -9,18 +9,14 @@ export type MonotonicsProps = {
   datasets: Dataset[];
   resolveIndexes: (id: Identity) => Promise<Index[]>;
   resolveData: (id: Identity) => Promise<Data>;
+  resolveDataPath: (id: Identity) => string;
   onSelectedDatasetChange?: (datasetId: string) => void;
   onDatasetCreate?: (input: {
     name: string;
     description: string;
     taskId: Identity;
   }) => Promise<void>;
-  onUpload?: (input: {
-    datasetId: Identity;
-    name: string;
-    type: string;
-    data: string;
-  }) => Promise<void>;
+  onUpload?: (input: { datasetId: Identity; files: File[] }) => Promise<void>;
 };
 
 export const Monotonics = ({
@@ -28,6 +24,7 @@ export const Monotonics = ({
   tasks,
   resolveData,
   resolveIndexes,
+  resolveDataPath,
   onDatasetCreate,
   onUpload,
 }: MonotonicsProps): JSX.Element => {
@@ -47,13 +44,14 @@ export const Monotonics = ({
     >
       <DataView
         datasetId={datasetId}
+        resolveDataPath={resolveDataPath}
         resolveIndexes={resolveIndexes}
         resolveData={resolveData}
-        onUpload={async (input) => {
+        onUpload={async (files) => {
           datasetId &&
             onUpload?.({
-              ...input,
               datasetId,
+              files,
             });
         }}
       />

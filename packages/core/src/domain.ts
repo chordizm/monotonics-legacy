@@ -21,7 +21,6 @@ export type Index = Entity<{
 }>;
 
 export type Data = Index & {
-  raw: string;
   items: Item[];
   params: Record<string, unknown>;
 };

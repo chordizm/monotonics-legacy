@@ -13,7 +13,6 @@ CREATE TABLE "Data" (
     "datasetId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "mimeType" TEXT NOT NULL,
-    "raw" BLOB NOT NULL,
     "items" TEXT NOT NULL,
     "params" TEXT NOT NULL,
     CONSTRAINT "Data_datasetId_fkey" FOREIGN KEY ("datasetId") REFERENCES "Dataset" ("id") ON DELETE RESTRICT ON UPDATE CASCADE

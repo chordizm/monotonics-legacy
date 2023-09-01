@@ -33,6 +33,13 @@ export type TaskRunnerGateway = {
   run: (taskId: Identity, dataId: Identity) => Promise<void>;
 };
 
+export type BlobStorageGateway = {
+  createWriteStream: (id: Identity) => Promise<NodeJS.WritableStream>;
+  createReadStream: (
+    id: Identity
+  ) => Promise<{ mimeType: string; stream: NodeJS.ReadableStream }>;
+};
+
 export type DatabaseGateway<T extends Identified> = {
   add: (entity: Omit<T, "id">) => Promise<Identity>;
   get: (query?: Query<T>) => Promise<T[]>;

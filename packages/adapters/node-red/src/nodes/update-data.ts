@@ -18,7 +18,7 @@ export default function (RED: NodeAPI) {
     node.on("input", (msg, send, done) => {
       const payload = msg.payload as UpdateDataPayload;
       (
-        (RED.settings.functionGlobalContext as any)?.usecases as UseCases
+        (RED.settings.functionGlobalContext as any)?.useCases as UseCases
       )?.updateData
         .execute(payload)
         .then((id) => {

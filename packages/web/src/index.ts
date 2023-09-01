@@ -3,6 +3,8 @@ import next from "next";
 import http from "http";
 import RED from "node-red";
 import bodyParser from "body-parser";
+import os from "os";
+import path from "path";
 import { PrismaClient } from "@prisma/client";
 import {
   Adapters,
@@ -12,6 +14,7 @@ import {
   DataRepository,
   DatasetRepository,
   GetDataByDatasetId,
+  GetBlobStreamById,
   GetDataset,
   GetDatasets,
   GetTasks,
@@ -21,6 +24,8 @@ import {
   RunTask,
   useCases,
   GetDataById,
+  FileSystemBlobStorageAdapter,
+  BlobStorage,
 } from "@monotonics/core";
 import {
   NodeRedTaskDatabaseAdapter,
@@ -41,9 +46,12 @@ initNodeRed(server, useCases);
 
 const prisma = new PrismaClient();
 
+const defaultBlobStoragePath = path.join(os.homedir(), ".monotonics", "blobs");
+
 const adapters: Adapters = {
   gateways: {
     taskRunner: new NodeRedTaskRunner(RED.events),
+    blobStorage: new FileSystemBlobStorageAdapter(defaultBlobStoragePath),
     data: new SQLiteDataDatabaseAdapter(prisma),
     dataset: new SQLiteDatasetDatabaseAdapter(prisma),
     task: new NodeRedTaskDatabaseAdapter(RED),
@@ -53,6 +61,7 @@ const adapters: Adapters = {
 };
 const services: Services = {
   taskRunner: new TaskRunner(adapters),
+  blobStorage: new BlobStorage(adapters),
   repositories: {
     data: new DataRepository(adapters),
     dataset: new DatasetRepository(adapters),
@@ -62,6 +71,7 @@ const services: Services = {
 useCases.addData = new AddData(services);
 useCases.createDataset = new CreateDataset(services);
 useCases.getDataByDatasetId = new GetDataByDatasetId(services);
+useCases.getBlobStreamById = new GetBlobStreamById(services);
 useCases.updateData = new UpdateData(services);
 useCases.getDatasets = new GetDatasets(services);
 useCases.getDataset = new GetDataset(services);
@@ -78,7 +88,7 @@ const handle = nextApp.getRequestHandler();
 app.all(
   "*",
   (req, res, next) => {
-    (req as any).usecases = useCases;
+    (req as any).useCases = useCases;
     next();
   },
   (req, res) => {

@@ -10,6 +10,6 @@ export const taskRouter = router({
       })
     )
     .query(async ({ ctx }) => {
-      return ctx.usecases.getTasks.execute(undefined);
+      return ctx.useCases.getTasks.execute(undefined);
     }),
 });

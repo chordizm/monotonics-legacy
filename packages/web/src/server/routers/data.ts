@@ -12,12 +12,13 @@ export const dataRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const data = await ctx.usecases.getDataByDatasetId.execute(
+      const data = await ctx.useCases.getDataByDatasetId.execute(
         input.datasetId ?? ""
       );
       console.debug("Data fetched.", data);
-      return data.map<Index>((d) => ({
+      return data.map<Index & { path: string }>((d) => ({
         id: d.id,
+        path: `/api/blob/${d.id}`,
         date: d.date,
         datasetId: d.datasetId,
         name: d.name,
@@ -31,33 +32,8 @@ export const dataRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
-      const data = await ctx.usecases.getDataById.execute({ id: input.id });
-      console.log(`Data fetched. (size: ${data.raw.length})`);
+      const data = await ctx.useCases.getDataById.execute({ id: input.id });
+      console.log(`Data fetched.${data})`);
       return data;
-    }),
-  add: publicProcedure
-    .input(
-      z.object({
-        datasetId: z.string(),
-        name: z.string(),
-        type: z.string(),
-        data: z.string(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      const { datasetId, type: mimeType, name, data: raw } = input;
-      const id = await ctx.usecases.addData.execute({
-        datasetId,
-        date: new Date(),
-        raw,
-        name,
-        mimeType,
-        items: [],
-        params: {},
-      });
-      const taskId = (await ctx.usecases.getDataset.execute({ id: datasetId }))
-        .taskId;
-      ctx.usecases.runTask.execute({ id: taskId, dataId: id });
-      return id;
     }),
 });

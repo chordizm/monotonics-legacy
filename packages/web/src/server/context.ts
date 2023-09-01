@@ -3,12 +3,12 @@ import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 
 interface CreateContextOptions {
-  usecases: UseCases;
+  useCases: UseCases;
 }
 
 export async function createContextInner(_opts: CreateContextOptions) {
   return {
-    usecases: _opts.usecases,
+    useCases: _opts.useCases,
   };
 }
 
@@ -19,6 +19,6 @@ export async function createContext(
 ): Promise<Context> {
   const req = opts.req as any;
   return await createContextInner({
-    usecases: req.usecases,
+    useCases: req.useCases,
   });
 }

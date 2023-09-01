@@ -21,13 +21,13 @@ export const init = <
   Response extends typeof ServerResponse
 >(
   server: Server<Request, Response>,
-  usecases: UseCases,
+  useCases: UseCases,
   settings?: LocalSettings
 ) => {
   const _settings = {
     ...defaultSettings,
     ...settings,
-    functionGlobalContext: { ...settings?.functionGlobalContext, usecases },
+    functionGlobalContext: { ...settings?.functionGlobalContext, useCases },
   };
   RED.init(server, _settings);
 };

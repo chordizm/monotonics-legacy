@@ -6,7 +6,6 @@ export default function Home() {
   const { data: datasets } = trpc.dataset.list.useInfiniteQuery({});
   const { data: tasks } = trpc.task.list.useInfiniteQuery({});
   const createDataset = trpc.dataset.create.useMutation();
-  const upload = trpc.data.add.useMutation();
   const ctx = trpc.useContext();
   return (
     <>
@@ -23,22 +22,26 @@ export default function Home() {
         resolveIndexes={(datasetId) =>
           ctx.client.data.list.query({ datasetId })
         }
+        resolveDataPath={(id) => `/api/data/${id}`}
         onDatasetCreate={async (input) => {
           createDataset.mutateAsync(input).then(() => {
             ctx.dataset.invalidate();
           });
         }}
         onUpload={async (input) => {
-          upload
-            .mutateAsync({
-              datasetId: input.datasetId,
-              name: input.name,
-              type: input.type,
-              data: input.data,
-            })
-            .then(() => {
-              ctx.data.invalidate();
-            });
+          const formData = new FormData();
+          formData.append("datasetId", input.datasetId);
+          input.files.forEach((file) => {
+            formData.append("files", file);
+          });
+          console.log("uploading", formData);
+          fetch("/api/add-data", {
+            method: "POST",
+            body: formData,
+          }).then(() => {
+            console.log("done uploading");
+            ctx.data.invalidate();
+          });
         }}
       />
     </>

@@ -11,7 +11,7 @@ export const datasetRouter = router({
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.usecases.createDataset.execute(input);
+      return ctx.useCases.createDataset.execute(input);
     }),
   list: publicProcedure
     .input(
@@ -21,6 +21,6 @@ export const datasetRouter = router({
       })
     )
     .query(async ({ ctx }) => {
-      return ctx.usecases.getDatasets.execute(undefined);
+      return ctx.useCases.getDatasets.execute(undefined);
     }),
 });
