@@ -13,6 +13,7 @@ model Dataset {
     name          String  @unique
     description   String
     data          Data[]
+    params        String
 }
 
 model Data {
@@ -24,4 +25,5 @@ model Data {
     mimeType    String
     items       String
     params      String
+    status      String
 }

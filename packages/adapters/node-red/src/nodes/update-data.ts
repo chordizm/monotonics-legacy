@@ -20,7 +20,12 @@ export default function (RED: NodeAPI) {
       (
         (RED.settings.functionGlobalContext as any)?.useCases as UseCases
       )?.updateData
-        .execute(payload)
+        .execute({
+          id: payload.id,
+          items: payload.items,
+          params: payload.params,
+          status: (payload as any).status,
+        } as any)
         .then((id) => {
           node.send({
             payload: {

@@ -8,6 +8,7 @@ export const datasetRouter = router({
         name: z.string(),
         description: z.string(),
         taskId: z.string(),
+        params: z.record(z.unknown()),
       })
     )
     .mutation(async ({ input, ctx }) => {

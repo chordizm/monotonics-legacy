@@ -5,6 +5,7 @@
     defaults: {
       name: { value: "MonoTonics Task" },
       mimeType: { value: "application/json" },
+      options: { value: "{}" },
     },
     inputs: 1,
     outputs: 1,
@@ -20,6 +21,8 @@
       name.val(node.name || "");
       var mimeType = $("#node-input-mimeType");
       mimeType.val(node.mimeType || "application/json");
+      var options = $("#node-input-options");
+      options.typedInput({ type: "json" });
     },
     oneditsave: function () {
       var node = this;
@@ -27,6 +30,8 @@
       node.name = name.val();
       var mimeType = $("#node-input-mimeType");
       node.mimeType = mimeType.val();
+      var options = $("#node-input-options");
+      node.options = options.val();
     },
   });
 </script>
@@ -52,6 +57,7 @@
       placeholder="Enter a name"
       style="width: 70%;"
     />
+    <br/>
     <label for="node-input-mimeType">
       <i class="icon-tag"></i> Mime-Type
     </label>
@@ -61,5 +67,15 @@
       <option value="text/plain">Text</option>
       <option value="text/csv">CSV</option>
     </select>
+    <br/>
+    <label for="node-input-options">
+      <i class="icon-tag"></i> Options
+    </label>
+    <input
+      type="text"
+      id="node-input-options"
+      placeholder="Enter a options(JSON)"
+      style="width: 70%;"
+    />
   </div>
 </script>

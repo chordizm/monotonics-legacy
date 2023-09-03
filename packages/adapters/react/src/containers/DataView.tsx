@@ -143,16 +143,14 @@ export const DataView = ({
           </Tab>
         ))}
       </Tabs>
-      {data ? (
+      {data?.status === "done" ? (
         <Tabs defaultValue="table">
           <Tab icon={<IconTable size="0.8rem" />} label="Table" value="table">
-            {data.items.length > 0 ? (
+            {data.items.length > 0 && (
               <TableView
                 data={data}
                 onClick={(index) => setSelectedItemIndex(index)}
               />
-            ) : (
-              <Processing />
             )}
           </Tab>
           <Tab
@@ -163,6 +161,8 @@ export const DataView = ({
             <ChartView data={data} />
           </Tab>
         </Tabs>
+      ) : data?.status === "pending" ? (
+        <Processing />
       ) : (
         <></>
       )}

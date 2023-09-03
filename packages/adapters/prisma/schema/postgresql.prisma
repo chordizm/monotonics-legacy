@@ -13,6 +13,7 @@ model Dataset {
     description   String
     taskId        String
     data          Data[]
+    params        Json
 }
 
 model Data {
@@ -24,4 +25,5 @@ model Data {
     mimeType    String
     items       Json
     params      Json
+    status      String
 }

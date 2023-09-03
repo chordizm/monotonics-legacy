@@ -1,15 +1,16 @@
-import { Identity, Task } from "@monotonics/core";
-import { Dialog, Form, IconButton } from "../components";
+import { Dataset, Identity, Task } from "@monotonics/core";
+import { Dialog, Form, IconButton, Input } from "../components";
 import { IconDatabasePlus, IconPlus } from "@tabler/icons-react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 export type CreateDatasetButtonProps = {
   tasks: Task[];
-  onCreate?: (item: {
-    name: string;
-    description: string;
-    taskId: Identity;
-  }) => Promise<void>;
+  //   onCreate?: (item: {
+  //     name: string;
+  //     description: string;
+  //     taskId: Identity;
+  //   }) => Promise<void>;
+  onCreate?: (dataset: Omit<Dataset, "id">) => Promise<void>;
 };
 
 export const CreateDatasetButton = ({
@@ -17,6 +18,31 @@ export const CreateDatasetButton = ({
   onCreate,
 }: CreateDatasetButtonProps) => {
   const [open, setOpen] = useState(false);
+  const [taskId, setTaskId] = useState<Identity>();
+  const inputs = useMemo(() => {
+    console.log(tasks);
+    const task = tasks.find((task) => task.id === taskId);
+    console.log("Selected Task", task);
+    const taskParams: Input[] = [];
+    if (task?.options?.inputs) {
+      task.options.inputs.forEach((input) => {
+        taskParams.push({
+          label: input.label,
+          name: input.name,
+          type: input.type as "text" | "select",
+          options: input.options?.map((option) => ({
+            value: option.value,
+            label: option.label,
+          })),
+          validate: (value: string | number) => {
+            return null;
+          },
+        });
+      });
+    }
+    console.log("Task Parameter Inputs", taskParams);
+    return taskParams;
+  }, [taskId]);
   return (
     <>
       <IconButton onClick={() => setOpen(true)}>
@@ -64,12 +90,31 @@ export const CreateDatasetButton = ({
                 return null;
               },
             },
+            ...inputs,
           ]}
+          onChange={(values) => {
+            console.log(values);
+            const taskId = values["taskId"]?.toString();
+            if (taskId) {
+              setTaskId(taskId);
+            }
+          }}
           onSubmit={(values) => {
+            console.log("Create Dataset", values);
             onCreate?.({
               name: values["name"].toString(),
               description: values["description"]?.toString() ?? "",
               taskId: values["taskId"]?.toString() ?? "",
+              params: Object.fromEntries(
+                Object.keys(values)
+                  .filter(
+                    (key) =>
+                      key !== "name" &&
+                      key !== "description" &&
+                      key !== "taskId"
+                  )
+                  .map((key) => [key, values[key]])
+              ),
             }).then(() => {
               setOpen(false);
             });

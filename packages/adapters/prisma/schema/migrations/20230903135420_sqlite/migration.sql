@@ -3,7 +3,8 @@ CREATE TABLE "Dataset" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "taskId" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "description" TEXT NOT NULL
+    "description" TEXT NOT NULL,
+    "params" TEXT NOT NULL
 );
 
 -- CreateTable
@@ -15,6 +16,7 @@ CREATE TABLE "Data" (
     "mimeType" TEXT NOT NULL,
     "items" TEXT NOT NULL,
     "params" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
     CONSTRAINT "Data_datasetId_fkey" FOREIGN KEY ("datasetId") REFERENCES "Dataset" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 

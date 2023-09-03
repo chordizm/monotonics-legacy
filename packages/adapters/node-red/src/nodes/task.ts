@@ -19,7 +19,8 @@ export default function (RED: NodeAPI) {
   function TaskNode(this: Node, props: TaskNodeProps) {
     RED.nodes.createNode(this, props);
     const node = this;
-    const trigger = (
+    console.log("[Node-RED TaskNode] Created.", node);
+    const trigger = async (
       msg: NodeMessageInFlow,
       send?: (
         msg: NodeMessage | (NodeMessage | NodeMessage[] | null)[]
@@ -30,19 +31,26 @@ export default function (RED: NodeAPI) {
       console.log("TaskNode", payload);
       if (!payload)
         return done?.(new Error("Payload is required for task trigger"));
-      (
-        (RED.settings.functionGlobalContext as any)?.useCases as UseCases
-      )?.getBlobStreamById
-        .execute({
-          id: payload.id,
-        })
-        .then(({ mimeType, stream }) => {
-          node.send?.({
-            payload: { ...payload, stream, mimeType },
-          });
-          console.log("[Node-RED TaskNode] Done.");
-          done?.();
-        });
+      const useCases = (RED.settings.functionGlobalContext as any)
+        ?.useCases as UseCases;
+      if (!useCases)
+        return done?.(new Error("UseCases not found in functionGlobalContext"));
+      const data = await useCases.getDataById.execute({
+        id: payload.id,
+      });
+      if (!data)
+        return done?.(new Error(`Data not found for id ${payload.id}`));
+      const { mimeType, stream } = await useCases?.getBlobStreamById.execute({
+        id: payload.id,
+      });
+      const dataset = await useCases.getDataset.execute({
+        id: data.datasetId,
+      });
+      node.send?.({
+        payload: { ...payload, stream, mimeType, params: dataset.params },
+      });
+      console.log("[Node-RED TaskNode] Done.");
+      done?.();
     };
 
     RED.events.on(node.id, trigger);

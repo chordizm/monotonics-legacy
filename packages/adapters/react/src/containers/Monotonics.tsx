@@ -11,11 +11,7 @@ export type MonotonicsProps = {
   resolveData: (id: Identity) => Promise<Data>;
   resolveDataPath: (id: Identity) => string;
   onSelectedDatasetChange?: (datasetId: string) => void;
-  onDatasetCreate?: (input: {
-    name: string;
-    description: string;
-    taskId: Identity;
-  }) => Promise<void>;
+  onDatasetCreate?: (input: Omit<Dataset, "id">) => Promise<void>;
   onUpload?: (input: { datasetId: Identity; files: File[] }) => Promise<void>;
 };
 
@@ -42,19 +38,33 @@ export const Monotonics = ({
         ),
       }}
     >
-      <DataView
-        datasetId={datasetId}
-        resolveDataPath={resolveDataPath}
-        resolveIndexes={resolveIndexes}
-        resolveData={resolveData}
-        onUpload={async (files) => {
-          datasetId &&
-            onUpload?.({
-              datasetId,
-              files,
-            });
-        }}
-      />
+      {datasetId ? (
+        <DataView
+          datasetId={datasetId}
+          resolveDataPath={resolveDataPath}
+          resolveIndexes={resolveIndexes}
+          resolveData={resolveData}
+          onUpload={async (files) => {
+            datasetId &&
+              onUpload?.({
+                datasetId,
+                files,
+              });
+          }}
+        />
+      ) : (
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          Select a dataset
+        </div>
+      )}
     </AppShell>
   );
 };
