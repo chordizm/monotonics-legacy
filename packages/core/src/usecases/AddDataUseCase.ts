@@ -1,7 +1,13 @@
-import { resolve } from "path";
-import { AddDataUseCase, AddDataUseCaseInput } from ".";
-import { Identity } from "../domain";
+import { Data, Identity } from "../domain";
 import { Services } from "../services";
+import { AsyncUseCase } from ".";
+
+export type AddDataUseCaseInput = {
+  data: Omit<Data, "id">;
+  stream: NodeJS.ReadableStream;
+};
+
+export type AddDataUseCase = AsyncUseCase<AddDataUseCaseInput, Identity>;
 
 export default class implements AddDataUseCase {
   constructor(private readonly services: Services) {}

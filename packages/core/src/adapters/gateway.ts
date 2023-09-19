@@ -33,6 +33,11 @@ export type TaskRunnerGateway = {
   run: (taskId: Identity, dataId: Identity) => Promise<void>;
 };
 
+export type HasherGateway = {
+  hash: (plain: string) => Promise<string>;
+  compare: (plain: string, hash: string) => Promise<boolean>;
+};
+
 export type BlobStorageGateway = {
   createWriteStream: (id: Identity) => Promise<NodeJS.WritableStream>;
   createReadStream: (

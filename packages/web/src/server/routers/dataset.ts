@@ -22,6 +22,9 @@ export const datasetRouter = router({
       })
     )
     .query(async ({ ctx }) => {
+      if (!ctx.permissions.some((p) => p === "*" || p === "dataset.get")) {
+        throw new Error("Permission denied");
+      }
       return ctx.useCases.getDatasets.execute(undefined);
     }),
 });

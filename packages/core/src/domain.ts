@@ -1,4 +1,3 @@
-export type Role = "admin" | "user";
 export type Identity = string;
 export type Identified = { id: Identity };
 export type Entity<T> = Identified & T;
@@ -51,6 +50,18 @@ export type Task = Entity<{
   options: TaskOptions;
 }>;
 
-export type User = Entity<{ name: string; role: Role }>;
+export type User = Entity<{
+  email: string;
+  name: string;
+  roleId: Identity;
+  password: string;
+  status: "active" | "deleted";
+}>;
+export type Role = Entity<{
+  name: string;
+  permissions: Permission[];
+}>;
+export type Permission = string;
+
 export type Tag = Entity<{ name: string }>;
 export type Point = { x: number; y: number };

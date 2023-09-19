@@ -10,6 +10,9 @@ export const taskRouter = router({
       })
     )
     .query(async ({ ctx }) => {
+      if (!ctx.permissions.some((p) => p === "*" || p === "task.get")) {
+        throw new Error("Permission denied");
+      }
       return ctx.useCases.getTasks.execute(undefined);
     }),
 });

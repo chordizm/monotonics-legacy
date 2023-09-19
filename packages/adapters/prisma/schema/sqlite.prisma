@@ -10,7 +10,7 @@ datasource db {
 model Dataset {
     id            String  @id @default(uuid())
     taskId        String
-    name          String  @unique
+    name          String
     description   String
     data          Data[]
     params        String
@@ -26,4 +26,19 @@ model Data {
     items       String
     params      String
     status      String
+}
+
+model User {
+    id          String  @id @default(uuid())
+    email       String  @unique
+    name        String?
+    password    String?
+    roleId      String
+    status      String
+}
+
+model Role {
+    id          String  @id @default(uuid())
+    name        String?
+    permissions String
 }

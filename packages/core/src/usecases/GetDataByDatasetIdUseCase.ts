@@ -1,6 +1,8 @@
-import { GetDataByDatasetIdUseCase } from ".";
+import { AsyncUseCase } from ".";
 import { Data, Identity } from "../domain";
 import { Services } from "../services";
+
+export type GetDataByDatasetIdUseCase = AsyncUseCase<Identity, Data[]>;
 
 export default class implements GetDataByDatasetIdUseCase {
   constructor(private readonly services: Services) {}

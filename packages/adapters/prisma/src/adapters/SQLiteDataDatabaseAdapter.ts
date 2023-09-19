@@ -22,7 +22,6 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
         ...entity,
         items: JSON.stringify(entity.items),
         params: JSON.stringify(entity.params),
-        status: "pending",
       },
     });
     return record.id;

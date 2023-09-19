@@ -6,7 +6,6 @@ import {
 } from "formidable";
 import fs from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { trpc } from "@/utils/trpc";
 
 export const config = {
   api: {
@@ -67,6 +66,7 @@ export default async function handler(
         file.mimetype === null ? "application/octet-stream" : file.mimetype,
       items: [],
       params: {},
+      status: "pending",
     },
     stream,
   });

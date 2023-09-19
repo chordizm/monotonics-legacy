@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import React, { useEffect } from "react";
 
 export type Input = {
-  type: "text" | "select";
+  type: "text" | "select" | "password" | "email";
   name: string;
   initialValue?: string | number;
   label: string;
@@ -13,9 +13,11 @@ export type Input = {
 };
 
 export type FormProps = React.PropsWithChildren<{
+  method?: "POST" | "GET";
+  action?: string;
   inputs: Input[];
   onChange?: (values: { [key: string]: string | number }) => void;
-  onSubmit: (values: { [key: string]: string | number }) => void;
+  onSubmit?: (values: { [key: string]: string | number }) => void;
 }>;
 
 export const Form = (props: FormProps) => {
@@ -52,25 +54,11 @@ export const Form = (props: FormProps) => {
             .filter((x) => inputs.some((y) => y.name === x))
             .map((x) => [x, values[x]])
         );
-        onSubmit(_values);
+        onSubmit?.(_values);
       })}
     >
       {inputs.map((input) =>
-        input.type === "text" ? (
-          <TextInput
-            key={input.label}
-            name={input.name}
-            label={input.label}
-            value={form.values[input.name]}
-            onChange={(event) => {
-              form.setFieldValue(input.name, event.currentTarget.value);
-              onChange?.({ [input.name]: event.currentTarget.value });
-            }}
-            description={input.description}
-            error={form.errors[input.name]}
-            style={{ marginBottom: 15 }}
-          />
-        ) : (
+        input.type === "select" ? (
           <Select
             key={input.label}
             name={input.name}
@@ -82,6 +70,21 @@ export const Form = (props: FormProps) => {
             }}
             description={input.description}
             data={input?.options ?? []}
+            error={form.errors[input.name]}
+            style={{ marginBottom: 15 }}
+          />
+        ) : (
+          <TextInput
+            type={input.type}
+            key={input.label}
+            name={input.name}
+            label={input.label}
+            value={form.values[input.name]}
+            onChange={(event) => {
+              form.setFieldValue(input.name, event.currentTarget.value);
+              onChange?.({ [input.name]: event.currentTarget.value });
+            }}
+            description={input.description}
             error={form.errors[input.name]}
             style={{ marginBottom: 15 }}
           />

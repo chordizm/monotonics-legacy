@@ -1,6 +1,11 @@
-import { GetDataByIdUseCase, GetDataByIdUseCaseInput } from ".";
-import { Data } from "../domain";
+import { AsyncUseCase } from ".";
+import { Data, Identity } from "../domain";
 import { Services } from "../services";
+
+export type GetDataByIdUseCaseInput = {
+  id: Identity;
+};
+export type GetDataByIdUseCase = AsyncUseCase<GetDataByIdUseCaseInput, Data>;
 
 export default class implements GetDataByIdUseCase {
   constructor(private readonly services: Services) {}

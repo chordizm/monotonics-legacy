@@ -1,5 +1,14 @@
-import { GetBlobStreamByIdUseCase, GetBlobStreamByIdUseCaseInput } from ".";
+import { AsyncUseCase } from ".";
+import { Identity } from "../domain";
 import { Services } from "../services";
+
+export type GetBlobStreamByIdUseCaseInput = {
+  id: Identity;
+};
+export type GetBlobStreamByIdUseCase = AsyncUseCase<
+  GetBlobStreamByIdUseCaseInput,
+  { mimeType: string; stream: NodeJS.ReadableStream }
+>;
 
 export default class implements GetBlobStreamByIdUseCase {
   constructor(private readonly services: Services) {}

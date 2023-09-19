@@ -2,7 +2,12 @@ import { BlobStorageGateway } from "./gateway";
 import fs from "fs";
 
 export class FileSystemBlobStorageAdapter implements BlobStorageGateway {
-  constructor(private readonly path: string) {}
+  constructor(private readonly path: string) {
+    fs.existsSync(path) ||
+      fs.mkdirSync(path, {
+        recursive: true,
+      });
+  }
   async createWriteStream(id: string): Promise<NodeJS.WritableStream> {
     const stream = fs.createWriteStream(`${this.path}/${id}`);
     stream.on("end", () => {

@@ -5,11 +5,6 @@ import { useMemo, useState } from "react";
 
 export type CreateDatasetButtonProps = {
   tasks: Task[];
-  //   onCreate?: (item: {
-  //     name: string;
-  //     description: string;
-  //     taskId: Identity;
-  //   }) => Promise<void>;
   onCreate?: (dataset: Omit<Dataset, "id">) => Promise<void>;
 };
 

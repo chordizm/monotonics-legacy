@@ -20,5 +20,22 @@ CREATE TABLE "Data" (
     CONSTRAINT "Data_datasetId_fkey" FOREIGN KEY ("datasetId") REFERENCES "Dataset" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "email" TEXT NOT NULL,
+    "name" TEXT,
+    "password" TEXT,
+    "roleId" TEXT NOT NULL,
+    "status" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Role" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT,
+    "permissions" TEXT NOT NULL
+);
+
 -- CreateIndex
-CREATE UNIQUE INDEX "Dataset_name_key" ON "Dataset"("name");
+CREATE UNIQUE INDEX "User_email_key" ON "User"("email");

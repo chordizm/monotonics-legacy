@@ -12,6 +12,9 @@ export const dataRouter = router({
       })
     )
     .query(async ({ input, ctx }) => {
+      if (!ctx.permissions.some((p) => p === "*" || p === "data.get")) {
+        throw new Error("Permission denied");
+      }
       const data = await ctx.useCases.getDataByDatasetId.execute(
         input.datasetId ?? ""
       );
