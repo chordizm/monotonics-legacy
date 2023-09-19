@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   AppShell as MantineAppShell,
   Header,
@@ -20,7 +20,7 @@ export type AppShellProps = React.PropsWithChildren<{
 
 export const AppShell = (props: AppShellProps) => {
   const { navbar, children } = props;
-  const [opened, setOpened] = React.useState(false);
+  const [opened, setOpened] = useState(false);
   return (
     <MantineAppShell
       header={

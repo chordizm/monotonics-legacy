@@ -6,7 +6,8 @@
   "node-red": {
     "nodes": {
       "task": "dist/nodes/task.js",
-      "add-data": "dist/nodes/add-data.js"
+      "add-data": "dist/nodes/add-data.js",
+      "update-data": "dist/nodes/update-data.js"
     }
   },
   "scripts": {

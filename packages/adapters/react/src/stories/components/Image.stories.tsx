@@ -1,4 +1,4 @@
-import { Image } from "@/components";
+import { Image } from "../../components";
 
 export default {
   title: "Components/Image",

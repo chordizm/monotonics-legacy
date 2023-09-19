@@ -1,11 +1,5 @@
-import { ImageView } from "@/containers";
-import { Provider, createStore } from "jotai";
-import {
-  dataAtom,
-  selectedDataIdAtom,
-  UrlResolverAtom
-} from "@/store";
-import { Data, Identity } from "@monotonics/core";
+import { ImageView, Provider } from "../../containers";
+import { Data } from "@monotonics/core";
 
 export default {
   title: "Containers/ImageView",
@@ -41,18 +35,13 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
   }),
 }));
 
-const defaultStore = createStore();
-defaultStore.set(dataAtom, data);
-defaultStore.set(selectedDataIdAtom, "data-0");
-defaultStore.set(UrlResolverAtom, {
-    getUrl: (id: Identity) => `/sample.jpg`,
-});
-
 export const Default = {
-  args: {},
+  args: {
+    data,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={defaultStore}>
+      <Provider>
         <Story />
       </Provider>
     ),

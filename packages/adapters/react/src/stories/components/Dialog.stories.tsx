@@ -1,4 +1,4 @@
-import { Dialog } from "@/components";
+import { Dialog } from "../../components";
 
 export default {
   title: "Components/Dialog",

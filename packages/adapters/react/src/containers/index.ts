@@ -1,8 +1,11 @@
+export * from "./AddDataButton";
 export * from "./ChartView";
 export * from "./CreateDatasetButton";
 export * from "./Datasets";
 export * from "./ImageView";
 export * from "./Monotonics";
+export * from "./Provider";
 export * from "./TableView";
-export * from "./ThumbnailView";
-export * from "./View";
+export * from "./DataView";
+export * from "./SignInForm";
+// export * from "./ThumbnailView";

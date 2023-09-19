@@ -1,12 +1,5 @@
-import { Monotonics } from "@/containers";
-import { Provider, createStore } from "jotai";
-import {
-  tasksAtom,
-  datasetsAtom,
-  selectedDatasetIdAtom,
-  dataAtom,
-  UrlResolverAtom,
-} from "@/store";
+import { action } from "@storybook/addon-actions";
+import { Monotonics, Provider } from "../../containers";
 import { Data, Dataset, Identity, Task } from "@monotonics/core";
 
 export default {
@@ -41,47 +34,43 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
   params: {},
-  items: Array.from({ length: 100 }).map((_, j) => {
-    const params = generateParams();
-    return {
-      ...params,
-      labels: [params.roundness > 0.8 ? "circle" : "square"],
-      points: [
-        { x: Math.random() * 300, y: Math.random() * 200 },
-        { x: Math.random() * 300, y: Math.random() * 200 },
-        { x: Math.random() * 300, y: Math.random() * 200 },
-      ],
-    };
-  }),
+  items:
+    i % 2 === 0
+      ? []
+      : Array.from({ length: 100 }).map((_, j) => {
+          const params = generateParams();
+          return {
+            ...params,
+            labels: [params.roundness > 0.8 ? "circle" : "square"],
+            points: [
+              { x: Math.random() * 300, y: Math.random() * 200 },
+              { x: Math.random() * 300, y: Math.random() * 200 },
+              { x: Math.random() * 300, y: Math.random() * 200 },
+            ],
+          };
+        }),
 }));
 
-const defaultStore = createStore();
-defaultStore.set(datasetsAtom, datasets);
-defaultStore.set(tasksAtom, tasks);
-defaultStore.set(dataAtom, data);
-defaultStore.set(UrlResolverAtom, {
-  getUrl: (id: Identity) => `/sample.jpg`,
-});
 export const Default = {
-  args: {},
+  args: {
+    data,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={defaultStore}>
+      <Provider>
         <Story />
       </Provider>
     ),
   ],
 };
 
-const datasetSelectedStore = createStore();
-datasetSelectedStore.set(datasetsAtom, datasets);
-datasetSelectedStore.set(tasksAtom, tasks);
-datasetSelectedStore.set(selectedDatasetIdAtom, "dataset-0");
 export const DatasetSelected = {
-  args: {},
+  args: {
+    data,
+  },
   decorators: [
     (Story: any) => (
-      <Provider store={datasetSelectedStore}>
+      <Provider>
         <Story />
       </Provider>
     ),

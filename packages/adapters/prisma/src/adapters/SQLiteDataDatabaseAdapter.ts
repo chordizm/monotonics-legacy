@@ -16,6 +16,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
   constructor(private readonly prisma: PrismaClient) {}
 
   async add(entity: Omit<Data, "id">): Promise<Identity> {
+    console.log("SQLiteDataDatabaseAdapter.add", JSON.stringify(entity));
     const record = await this.prisma.data.create({
       data: {
         ...entity,
@@ -26,6 +27,7 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
     return record.id;
   }
   async get(query?: Query<Data>): Promise<Data[]> {
+    console.log("SQLiteDataDatabaseAdapter.get", JSON.stringify(query));
     const records = await this.prisma.data.findMany({
       where: query && convertDataQueryToPrismaQuery(query),
     });
@@ -34,22 +36,32 @@ export class SQLiteDataDatabaseAdapter implements DatabaseGateway<Data> {
       date: d.date,
       datasetId: d.datasetId,
       name: d.name,
-      raw: d.raw,
       mimeType: d.mimeType,
       params: JSON.parse(d.params),
       items: JSON.parse(d.items),
+      status: d.status,
     }));
     return data;
   }
 
-  async update(entity: Data): Promise<Identity> {
+  async update(
+    entity: { id: Identity } & Partial<Omit<Data, "id">>
+  ): Promise<Identity> {
+    console.log("SQLiteDataDatabaseAdapter.update", JSON.stringify(entity));
+    const data: any = {};
+    if (entity.items) {
+      data["items"] = JSON.stringify(entity.items);
+    }
+    if (entity.params) {
+      data["params"] = JSON.stringify(entity.params);
+    }
+    if (entity.status) {
+      data["status"] = entity.status;
+    }
+
     const record = await this.prisma.data.update({
       where: { id: entity.id },
-      data: {
-        ...entity,
-        items: JSON.stringify(entity.items),
-        params: JSON.stringify(entity.params),
-      },
+      data,
     });
     return record.id;
   }

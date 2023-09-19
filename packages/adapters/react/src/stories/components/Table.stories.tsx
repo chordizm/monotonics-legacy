@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeaderCell,
   TableRow,
-} from "@/components";
+} from "../../components";
 
 export default {
   title: "Components/Table",

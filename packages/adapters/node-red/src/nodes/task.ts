@@ -15,10 +15,12 @@ export type TaskNodePayload = {
 type TaskNodeProps = NodeDef & {};
 
 export default function (RED: NodeAPI) {
-  function TaskTriggerNode(this: Node, props: TaskNodeProps) {
+  console.log("[Adapter Node-RED] Registering TaskNode");
+  function TaskNode(this: Node, props: TaskNodeProps) {
     RED.nodes.createNode(this, props);
     const node = this;
-    const trigger = (
+    console.log("[Node-RED TaskNode] Created.", node);
+    const trigger = async (
       msg: NodeMessageInFlow,
       send?: (
         msg: NodeMessage | (NodeMessage | NodeMessage[] | null)[]
@@ -26,20 +28,29 @@ export default function (RED: NodeAPI) {
       done?: (err?: Error | undefined) => void
     ) => {
       const payload = msg.payload as TaskNodePayload;
+      console.log("TaskNode", payload);
       if (!payload)
         return done?.(new Error("Payload is required for task trigger"));
-      (
-        (RED.settings.functionGlobalContext as any)?.usecases as UseCases
-      )?.getRawData
-        .execute({
-          id: payload.id,
-        })
-        .then((data) => {
-          send?.({
-            payload: { ...payload, size: data.length, blob: data },
-          });
-          done?.();
-        });
+      const useCases = (RED.settings.functionGlobalContext as any)
+        ?.useCases as UseCases;
+      if (!useCases)
+        return done?.(new Error("UseCases not found in functionGlobalContext"));
+      const data = await useCases.getDataById.execute({
+        id: payload.id,
+      });
+      if (!data)
+        return done?.(new Error(`Data not found for id ${payload.id}`));
+      const { mimeType, stream } = await useCases?.getBlobStreamById.execute({
+        id: payload.id,
+      });
+      const dataset = await useCases.getDataset.execute({
+        id: data.datasetId,
+      });
+      node.send?.({
+        payload: { ...payload, stream, mimeType, params: dataset.params },
+      });
+      console.log("[Node-RED TaskNode] Done.");
+      done?.();
     };
 
     RED.events.on(node.id, trigger);
@@ -50,5 +61,5 @@ export default function (RED: NodeAPI) {
       RED.events.removeListener(node.id, trigger);
     });
   }
-  RED.nodes.registerType(TASK_TRIGGER_NODE_NAME, TaskTriggerNode);
+  RED.nodes.registerType(TASK_TRIGGER_NODE_NAME, TaskNode);
 }

@@ -6,15 +6,19 @@ import {
   TableHeaderCell,
   TableBody,
   TableCell,
-} from "@/components";
+} from "../components";
 import { Badge, Box } from "@mantine/core";
-import { useColors, useSelectedData, useSelectedItemIndex } from "@/store";
-import { convertCamelCaseToWords } from "@/utils";
+import { convertCamelCaseToWords, getColors } from "../utils";
+import { Data, Identity } from "@monotonics/core";
 
-export const TableView = (_: {}): JSX.Element => {
-  const [data] = useSelectedData();
-  const [colors] = useColors();
-  const [__, setSelectedIndex] = useSelectedItemIndex();
+export type TableViewProps = {
+  selectedIndex?: Identity;
+  data: Data;
+  onClick?: (index?: number) => void;
+};
+
+export const TableView = ({ data, onClick }: TableViewProps): JSX.Element => {
+  const colors = getColors(data);
   const ignore = useMemo(() => {
     return data?.mimeType?.startsWith("image") ? ["points"] : [];
   }, [data]);
@@ -40,7 +44,7 @@ export const TableView = (_: {}): JSX.Element => {
       </TableHead>
       <TableBody>
         {data.items.map((item, index) => (
-          <TableRow key={index} onClick={() => setSelectedIndex(index)}>
+          <TableRow key={index} onClick={() => onClick?.(index)}>
             <TableCell>{index + 1}</TableCell>
             {columns.map((column) => (
               <TableCell key={column}>{JSON.stringify(item[column])}</TableCell>

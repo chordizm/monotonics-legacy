@@ -8,48 +8,23 @@ export const datasetRouter = router({
         name: z.string(),
         description: z.string(),
         taskId: z.string(),
+        params: z.record(z.unknown()),
       })
     )
     .mutation(async ({ input, ctx }) => {
-      return ctx.usecases.createDataset.execute(input);
+      return ctx.useCases.createDataset.execute(input);
     }),
   list: publicProcedure
     .input(
       z.object({
         limit: z.number().min(1).max(100).nullish(),
-        cursor: z.string().nullish(),
+        cursor: z.number().nullish(),
       })
     )
-    .query(async ({ input, ctx }) => {
-      return ctx.usecases.getDatasets.execute(undefined);
-    }),
-  addData: publicProcedure
-    .input(
-      z.object({
-        datasetId: z.string(),
-        data: z.string(),
-        name: z.string().nullish(),
-      })
-    )
-    .mutation(async ({ input, ctx }) => {
-      return ctx.usecases.addData.execute({
-        date: new Date(),
-        datasetId: input.datasetId,
-        raw: Buffer.from(input.data.split(",")[1], "base64"),
-        mimeType: input.data.split(",")[0].split(";")[0].split(":")[1],
-        name: input.name ?? "",
-        items: [],
-        params: {
-          segments: [
-            {
-              points: [
-                { x: 100, y: 100 },
-                { x: 100, y: 200 },
-                { x: 200, y: 100 },
-              ],
-            },
-          ],
-        },
-      });
+    .query(async ({ ctx }) => {
+      if (!ctx.permissions.some((p) => p === "*" || p === "dataset.get")) {
+        throw new Error("Permission denied");
+      }
+      return ctx.useCases.getDatasets.execute(undefined);
     }),
 });
