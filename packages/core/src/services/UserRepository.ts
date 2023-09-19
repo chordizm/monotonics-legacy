@@ -12,17 +12,20 @@ export class UserRepository {
   }
   async get(query?: Query<User>): Promise<Omit<User, "password">[]> {
     const password = query?.filter?.password?.$eq;
-    if (password) {
-      return this.adapters.gateways.user
-        .get(query)
-        .then((users) =>
-          users.filter(
-            async (u) =>
-              await this.adapters.gateways.hasher.compare(password, u.password)
-          )
-        );
-    }
-    return this.adapters.gateways.user.get(query);
+    return this.adapters.gateways.user
+      .get(query)
+      .then((users) =>
+        password === undefined
+          ? users
+          : users.filter(
+              async (u) =>
+                await this.adapters.gateways.hasher.compare(
+                  password,
+                  u.password
+                )
+            )
+      )
+      .then((users) => users.map(({ password, ...user }) => user));
   }
   async update(user: Identified & Partial<Omit<User, "id">>) {
     if (user.password) {
