@@ -22,6 +22,7 @@ export async function createContext(
   opts: trpcNext.CreateNextContextOptions
 ): Promise<Context> {
   const { req, res } = opts as any;
+  console.log("[trpc] createContext");
   const { useCases } = req as { useCases: UseCases };
 
   const session = await getServerSession(req, res, {

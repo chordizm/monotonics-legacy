@@ -18,7 +18,7 @@ export const dataRouter = router({
       const data = await ctx.useCases.getDataByDatasetId.execute(
         input.datasetId ?? ""
       );
-      console.debug("Data fetched.", data);
+      console.log("[TRPC] Data fetched.", `${data.length} items.`);
       return data.map<Index & { path: string }>((d) => ({
         id: d.id,
         path: `/api/blob/${d.id}`,
@@ -36,7 +36,7 @@ export const dataRouter = router({
     )
     .query(async ({ input, ctx }) => {
       const data = await ctx.useCases.getDataById.execute({ id: input.id });
-      console.log(`Data fetched.${data})`);
+      console.log("[TRPC] Data fetched.", data.id);
       return data;
     }),
 });
