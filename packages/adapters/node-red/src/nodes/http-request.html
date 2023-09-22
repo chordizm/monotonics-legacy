@@ -1,0 +1,52 @@
+<script type="text/javascript">
+  RED.nodes.registerType("@monotonics/http-request", {
+    category: "MonoTonics",
+    color: "#a6bbcf",
+    defaults: {
+      name: { value: "MonoTonics HTTP Request" },
+      url: { value: "/api/to/request" },
+    },
+    inputs: 1,
+    outputs: 1,
+    icon: "button.png",
+    label: function () {
+      return this.name || "HTTP Request";
+    },
+    oneditprepare: function () {
+      var node = this;
+      var name = $("#node-input-name");
+      name.val(node.name || "");
+      var url = $("#node-input-url");
+      url.val(node.url || "/api/to/request");
+    },
+    oneditsave: function () {
+      var node = this;
+      var name = $("#node-input-name");
+      node.name = name.val();
+    },
+  });
+</script>
+
+<script type="text/x-red" data-template-name="@monotonics/http-request">
+  <div class="form-row">
+    <label for="node-input-name">
+      <i class="icon-tag"></i> Name
+    </label>
+    <input
+      type="text"
+      id="node-input-name"
+      placeholder="Enter a name"
+      style="width: 70%;"
+    />
+    <br/>
+    <label for="node-input-url">
+      <i class="icon-tag"></i> URL
+    </label>
+    <input
+      type="text"
+      id="node-input-url"
+      placeholder="Enter a url"
+      style="width: 70%;"
+    />
+  </div>
+</script>
