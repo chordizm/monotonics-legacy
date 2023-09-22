@@ -7,7 +7,8 @@
     "nodes": {
       "task": "dist/nodes/task.js",
       "add-data": "dist/nodes/add-data.js",
-      "update-data": "dist/nodes/update-data.js"
+      "update-data": "dist/nodes/update-data.js",
+      "http-request": "dist/nodes/http-request.js"
     }
   },
   "scripts": {
