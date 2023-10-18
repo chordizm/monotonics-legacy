@@ -13,14 +13,14 @@ const generateParams = () => {
   return { area, perimeter, roundness };
 };
 
-const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
-  id: `data-${i}`,
-  name: `Data ${i + 1}`,
+const data: Omit<Data, "raw"> = {
+  id: `data-1`,
+  name: `Data 1`,
   date: new Date(),
-  description: `Data ${i + 1} description`,
-  datasetId: `dataset-${i}`,
+  datasetId: `dataset-1`,
   mimeType: "image/jpeg",
   params: {},
+  status: "done",
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateParams();
     return {
@@ -30,10 +30,11 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
         { x: k, y: Math.random() },
         { x: k + 1, y: Math.random() },
       ]),
+      area: Math.random() * 1000,
+      perimeter: Math.random() * 1000,
     };
   }),
-}));
-
+};
 export const Default = {
   args: {
     data,

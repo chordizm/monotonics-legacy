@@ -1,7 +1,7 @@
 import { Data, Identity, Index } from "@monotonics/core";
-import { AddDataButton, ChartView, ImageView, TableView } from ".";
+import { AddDataButton, ChartView, ImageView, SummaryView, TableView } from ".";
 import { SplitView, Tab, Tabs } from "../components";
-import { IconChartHistogram, IconTable } from "@tabler/icons-react";
+import { IconChartHistogram, IconNotes, IconTable } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 
 const Processing = () => {
@@ -144,7 +144,14 @@ export const DataView = ({
         ))}
       </Tabs>
       {data?.status === "done" ? (
-        <Tabs defaultValue="table">
+        <Tabs defaultValue="summary">
+          <Tab
+            icon={<IconNotes size="0.8rem" />}
+            label="Summary"
+            value="summary"
+          >
+            <SummaryView data={data} />
+          </Tab>
           <Tab icon={<IconTable size="0.8rem" />} label="Table" value="table">
             {data.items.length > 0 && (
               <TableView

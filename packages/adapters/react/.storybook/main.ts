@@ -21,6 +21,6 @@ const config: StorybookConfig = {
     }
     return config;
   },
-  staticDirs: [path.join(__dirname, "../../../../assets")],
+  //   staticDirs: [path.join(__dirname, "../../../../assets")],
 };
 export default config;

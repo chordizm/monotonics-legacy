@@ -12,12 +12,17 @@ const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   name: `Dataset ${i + 1}`,
   description: `Dataset ${i + 1} description`,
   taskId: "task-0",
+  params: {},
 }));
 const tasks: Task[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `task-${i}`,
   name: `Task ${i + 1}`,
   description: `Task ${i + 1} description`,
   mimeType: "image/jpeg",
+  options: {
+    inputs: [],
+    labels: [],
+  },
 }));
 const generateParams = () => {
   const area = Math.random() * 1000;
@@ -34,6 +39,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 10 }).map((_, i) => ({
   datasetId: `dataset-${i}`,
   mimeType: "image/jpeg",
   params: {},
+  status: "done",
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateParams();
     return {

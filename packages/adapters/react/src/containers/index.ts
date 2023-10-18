@@ -8,3 +8,4 @@ export * from "./Provider";
 export * from "./TableView";
 export * from "./DataView";
 export * from "./SignInForm";
+export * from "./SummaryView";

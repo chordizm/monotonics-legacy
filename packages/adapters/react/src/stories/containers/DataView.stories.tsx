@@ -20,13 +20,13 @@ const generateDataParams = () => {
   return { max, min, average };
 };
 
-const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
-  id: `data-${i}`,
-  name: `Data ${i + 1}`,
+const data: Omit<Data, "raw"> = {
+  id: `data-1`,
+  name: `Data 1`,
   date: new Date(),
-  description: `Data ${i + 1} description`,
-  datasetId: `dataset-${i}`,
+  datasetId: `dataset-1`,
   mimeType: "image/jpeg",
+  status: "done",
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateItemParams();
     return {
@@ -40,7 +40,7 @@ const data: Omit<Data, "raw">[] = Array.from({ length: 100 }).map((_, i) => ({
     };
   }),
   params: generateDataParams(),
-}));
+};
 
 const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `dataset-${i}`,
@@ -48,12 +48,17 @@ const datasets: Dataset[] = Array.from({ length: 10 }).map((_, i) => ({
   name: `Dataset ${i + 1}`,
   description: `Dataset ${i + 1} description`,
   mimeType: "image/jpeg",
+  params: {},
 }));
 const tasks: Task[] = Array.from({ length: 10 }).map((_, i) => ({
   id: `task-${i}`,
   name: `Task ${i + 1}`,
   description: `Task ${i + 1} description`,
   mimeType: "image/jpeg",
+  options: {
+    inputs: [],
+    labels: [],
+  },
 }));
 
 export const Default = {

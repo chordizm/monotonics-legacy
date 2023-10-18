@@ -1,9 +1,9 @@
-import { TableView, Provider } from "../../containers";
+import { SummaryView, Provider } from "../../containers";
 import { Data } from "@monotonics/core";
 
 export default {
-  title: "Containers/TableView",
-  component: TableView,
+  title: "Containers/SummaryView",
+  component: SummaryView,
 };
 
 const generateParams = () => {
@@ -19,7 +19,12 @@ const data: Omit<Data, "raw"> = {
   date: new Date(),
   datasetId: `dataset-1`,
   mimeType: "image/jpeg",
-  params: {},
+  params: {
+    "Average Area": "100",
+    "Average Perimeter": "200",
+    "Average Roundness": "0.5",
+    "Average Count": "10",
+  },
   status: "done",
   items: Array.from({ length: 100 }).map((_, j) => {
     const params = generateParams();
