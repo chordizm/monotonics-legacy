@@ -25,7 +25,7 @@ export default function Home() {
           formData.append("files", file);
         });
         console.log("uploading", formData);
-        fetch("/api/add-data", {
+        fetch("/api/data", {
           method: "POST",
           body: formData,
         }).then(() => {

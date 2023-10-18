@@ -6,6 +6,8 @@ import {
 } from "formidable";
 import fs from "fs";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 export const config = {
   api: {
@@ -19,6 +21,16 @@ export default async function handler(
 ) {
   if (req.method !== "POST") return;
   const useCases = (req as any).useCases as UseCases;
+  const session = await getServerSession(req, res, authOptions);
+  if (!session?.user?.email) {
+    res.status(401).end();
+    return;
+  }
+  const user = await useCases.getUserByEmail.execute(session.user.email);
+  if (!user) {
+    res.status(401).end();
+    return;
+  }
   if (!useCases) res.status(500).end();
   const form = formidable({ multiples: true });
   let fields: FormidableFields | null = null;
@@ -57,11 +69,12 @@ export default async function handler(
     return;
   }
   const stream = fs.createReadStream(file.filepath);
+  const date = new Date();
   const dataId = await useCases.addData.execute({
     data: {
       datasetId,
       name: file.originalFilename!,
-      date: new Date(),
+      date,
       mimeType:
         file.mimetype === null ? "application/octet-stream" : file.mimetype,
       items: [],
