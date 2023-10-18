@@ -7,6 +7,21 @@ datasource db {
     url      = env("MONOCONICS_SQLITE_DATABASE_URL")
 }
 
+model User {
+    id          String  @id @default(uuid())
+    email       String  @unique
+    name        String?
+    password    String?
+    roleId      String
+    status      String
+}
+
+model Role {
+    id          String  @id @default(uuid())
+    name        String?
+    permissions String
+}
+
 model Dataset {
     id            String  @id @default(uuid())
     taskId        String
@@ -26,19 +41,4 @@ model Data {
     items       String
     params      String
     status      String
-}
-
-model User {
-    id          String  @id @default(uuid())
-    email       String  @unique
-    name        String?
-    password    String?
-    roleId      String
-    status      String
-}
-
-model Role {
-    id          String  @id @default(uuid())
-    name        String?
-    permissions String
 }

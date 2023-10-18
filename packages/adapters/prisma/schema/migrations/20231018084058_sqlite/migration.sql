@@ -1,4 +1,21 @@
 -- CreateTable
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "email" TEXT NOT NULL,
+    "name" TEXT,
+    "password" TEXT,
+    "roleId" TEXT NOT NULL,
+    "status" TEXT NOT NULL
+);
+
+-- CreateTable
+CREATE TABLE "Role" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "name" TEXT,
+    "permissions" TEXT NOT NULL
+);
+
+-- CreateTable
 CREATE TABLE "Dataset" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "taskId" TEXT NOT NULL,
@@ -18,23 +35,6 @@ CREATE TABLE "Data" (
     "params" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     CONSTRAINT "Data_datasetId_fkey" FOREIGN KEY ("datasetId") REFERENCES "Dataset" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
-);
-
--- CreateTable
-CREATE TABLE "User" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "email" TEXT NOT NULL,
-    "name" TEXT,
-    "password" TEXT,
-    "roleId" TEXT NOT NULL,
-    "status" TEXT NOT NULL
-);
-
--- CreateTable
-CREATE TABLE "Role" (
-    "id" TEXT NOT NULL PRIMARY KEY,
-    "name" TEXT,
-    "permissions" TEXT NOT NULL
 );
 
 -- CreateIndex
