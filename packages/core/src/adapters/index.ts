@@ -1,4 +1,4 @@
-import { Data, Dataset, Role, Task, User } from "../domain";
+import { Data, Dataset, Identity, Role, Task, User } from "../domain";
 import {
   Query,
   BlobStorageGateway,

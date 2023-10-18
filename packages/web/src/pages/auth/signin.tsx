@@ -2,8 +2,7 @@ import { SignInForm } from "@monotonics/adapter_react";
 import { signIn } from "next-auth/react";
 import { getServerSession } from "next-auth/next";
 import { useRouter } from "next/router";
-import CredentialProvider from "next-auth/providers/credentials";
-import { UseCases } from "@monotonics/core";
+import { authOptions } from "../api/auth/[...nextauth]";
 
 export default function SignIn() {
   const router = useRouter();
@@ -32,21 +31,7 @@ export default function SignIn() {
 }
 
 export async function getServerSideProps({ req, res }: any) {
-  const session = await getServerSession(req, res, {
-    pages: {},
-    providers: [
-      CredentialProvider({
-        name: "default",
-        credentials: {
-          email: { label: "E-mail", type: "text", placeholder: "email" },
-          password: { label: "Password", type: "password" },
-        },
-        async authorize(credentials) {
-          return null;
-        },
-      }),
-    ],
-  });
+  const session = await getServerSession(req, res, authOptions);
   console.log("[auth/signIn] session", session);
   if (session) {
     return {

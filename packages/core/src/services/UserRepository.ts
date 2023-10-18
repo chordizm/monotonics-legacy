@@ -10,6 +10,30 @@ export class UserRepository {
       password: hash,
     });
   }
+  async signIn(
+    email: string,
+    password: string
+  ): Promise<Omit<User, "password">> {
+    const hash = await this.adapters.gateways.hasher.hash(password);
+    return this.adapters.gateways.user
+      .get({
+        filter: {
+          email: {
+            $eq: email,
+          },
+          password: {
+            $eq: hash,
+          },
+        },
+      })
+      .then((users) => {
+        if (users.length === 0) {
+          throw new Error("Invalid email or password");
+        }
+        const { password, ...user } = users[0];
+        return user;
+      });
+  }
   async get(query?: Query<User>): Promise<Omit<User, "password">[]> {
     const password = query?.filter?.password?.$eq;
     return this.adapters.gateways.user

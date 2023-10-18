@@ -3,18 +3,30 @@ import { NextApiRequest, NextApiResponse } from "next";
 import NextAuth from "next-auth";
 import CredentialProvider from "next-auth/providers/credentials";
 
+export const authOptions = {
+  pages: {
+    signIn: "/auth/signin",
+  },
+  providers: [
+    CredentialProvider({
+      name: "default",
+      credentials: {
+        email: { label: "E-mail", type: "text", placeholder: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials) {
+        return null;
+      },
+    }),
+  ],
+};
+
 export default (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, {
-    pages: {
-      signIn: "/auth/signin",
-    },
+    ...authOptions,
     providers: [
       CredentialProvider({
-        name: "default",
-        credentials: {
-          email: { label: "E-mail", type: "text", placeholder: "email" },
-          password: { label: "Password", type: "password" },
-        },
+        ...authOptions.providers[0],
         async authorize(credentials) {
           const useCases = (req as any).useCases as UseCases;
           if (!useCases || !credentials) {

@@ -1,8 +1,8 @@
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { UseCases } from "@monotonics/core";
 import * as trpc from "@trpc/server";
 import * as trpcNext from "@trpc/server/adapters/next";
 import { getServerSession } from "next-auth";
-import CredentialProvider from "next-auth/providers/credentials";
 
 interface CreateContextOptions {
   useCases: UseCases;
@@ -25,21 +25,7 @@ export async function createContext(
   console.log("[trpc] createContext");
   const { useCases } = req as { useCases: UseCases };
 
-  const session = await getServerSession(req, res, {
-    pages: {},
-    providers: [
-      CredentialProvider({
-        name: "default",
-        credentials: {
-          email: { label: "E-mail", type: "text", placeholder: "email" },
-          password: { label: "Password", type: "password" },
-        },
-        async authorize() {
-          return null;
-        },
-      }),
-    ],
-  });
+  const session = await getServerSession(req, res, authOptions);
   const user = await useCases.getUserByEmail.execute(
     session?.user?.email ?? ""
   );
